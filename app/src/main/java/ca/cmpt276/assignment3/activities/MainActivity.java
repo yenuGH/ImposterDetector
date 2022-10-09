@@ -3,10 +3,14 @@ package ca.cmpt276.assignment3.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.Button;
 
 import ca.cmpt276.assignment3.R;
 
 public class MainActivity extends AppCompatActivity {
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

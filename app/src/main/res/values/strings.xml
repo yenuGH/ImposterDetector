@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Assignment3</string>
+    <string name="found_mines">Found %d of %d impostors</string>
+    <string name="scans_used"># Scans used: %d</string>
 </resources>
