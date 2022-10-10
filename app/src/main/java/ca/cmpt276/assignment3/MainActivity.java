@@ -1,4 +1,4 @@
-package ca.cmpt276.assignment3.activities;
+package ca.cmpt276.assignment3;
 
 import androidx.appcompat.app.AppCompatActivity;
 
