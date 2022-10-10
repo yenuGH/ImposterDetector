@@ -30,13 +30,16 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void setupPlayButton(){
         ImageButton playButton = findViewById(R.id.ibPlayButton);
-        // setup intent for playing a new game
     }
     private void setupHelpButton(){
         ImageButton helpButton = findViewById(R.id.ibHelpButton);
     }
     private void setupOptionsButton(){
-        ImageButton optionsButton = findViewById(R.id.ibHelpButton);
+        ImageButton optionsButton = findViewById(R.id.ibOptionsButton);
+        Intent optionsMenu = new Intent(MainMenuActivity.this, OptionsMenuActivity.class);
+        optionsButton.setOnClickListener( view -> {
+            startActivity(optionsMenu);
+        });
     }
 
 }
