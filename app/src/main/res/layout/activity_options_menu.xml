@@ -11,7 +11,119 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/background_options_menu"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/background_options_menu" />
+
+    <TextView
+        android:id="@+id/tvBoardSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:text="Board Size"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/rgBoardSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvBoardSize">
+
+
+        <RadioButton
+            android:id="@+id/rbBoardSize1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4 rows by 6 columns"
+            android:textColor="@color/white"
+            tools:layout_editor_absoluteX="57dp"
+            tools:layout_editor_absoluteY="150dp" />
+
+        <RadioButton
+            android:id="@+id/rbBoardSize2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5 rows by 10 columns"
+            android:textColor="@color/white"
+            tools:layout_editor_absoluteX="57dp"
+            tools:layout_editor_absoluteY="102dp" />
+
+        <RadioButton
+            android:id="@+id/rbBoardSize3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6 rows by 15 columns"
+            android:textColor="@color/white"
+            tools:layout_editor_absoluteX="57dp"
+            tools:layout_editor_absoluteY="102dp" />
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tvNumberOfMines"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:text="Mine Count"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/rgBoardSize"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/rgMineCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/tvNumberOfMines"
+        app:layout_constraintTop_toBottomOf="@+id/tvNumberOfMines">
+
+        <RadioButton
+            android:id="@+id/rbMineCount1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="6 mines"
+            android:textColor="@color/white"
+            tools:layout_editor_absoluteX="57dp"
+            tools:layout_editor_absoluteY="150dp" />
+
+        <RadioButton
+            android:id="@+id/rbMineCount2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10 mines"
+            android:textColor="@color/white"
+            tools:layout_editor_absoluteX="57dp"
+            tools:layout_editor_absoluteY="102dp" />
+
+        <RadioButton
+            android:id="@+id/rbMineCount3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15 mines"
+            android:textColor="@color/white"
+            tools:layout_editor_absoluteX="57dp"
+            tools:layout_editor_absoluteY="102dp" />
+
+        <RadioButton
+            android:id="@+id/rbMineCount4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20 mines"
+            android:textColor="@color/white"
+            tools:layout_editor_absoluteX="57dp"
+            tools:layout_editor_absoluteY="102dp" />
+
+    </RadioGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
