@@ -41,6 +41,7 @@
 
         <RadioButton
             android:id="@+id/rbBoardSize1"
+            android:checked="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="4 rows by 6 columns"
@@ -90,6 +91,7 @@
 
         <RadioButton
             android:id="@+id/rbMineCount1"
+            android:checked="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="6 mines"
@@ -125,5 +127,18 @@
             tools:layout_editor_absoluteY="102dp" />
 
     </RadioGroup>
+
+    <Button
+        android:id="@+id/btnSaveOptions"
+        android:layout_width="140dp"
+        android:layout_height="65dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="SAVE"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
