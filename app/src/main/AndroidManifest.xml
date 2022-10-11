@@ -21,6 +21,20 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".activities.HelpActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".activities.GameActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activities.MainMenuActivity"
             android:exported="false"
             android:screenOrientation="landscape">
