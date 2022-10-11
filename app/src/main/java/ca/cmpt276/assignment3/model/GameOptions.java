@@ -3,8 +3,8 @@ package ca.cmpt276.assignment3.model;
 // A class for storing the game options
 public class GameOptions {
 
-    private int selectedBoardSizeOptionId;
-    private int selectedMineCountOptionId;
+    private int selectedBoardSizeOptionIndex;
+    private int selectedMineCountOptionIndex;
 
     // Singleton support for options
     private static GameOptions instance;
@@ -12,8 +12,8 @@ public class GameOptions {
         // Private to prevent anything else instantiating this
 
         // Set options to -1 when instance is created for the first time
-        selectedBoardSizeOptionId = -1;
-        selectedMineCountOptionId = -1;
+        selectedBoardSizeOptionIndex = -1;
+        selectedMineCountOptionIndex = -1;
     }
     public static GameOptions getInstance(){
         if (instance == null){
@@ -23,14 +23,14 @@ public class GameOptions {
     }
 
     public void setGameOptions(int selectedBoardSizeOption, int selectedMineCountOption){
-        this.selectedBoardSizeOptionId = selectedBoardSizeOption;
-        this.selectedMineCountOptionId = selectedMineCountOption;
+        this.selectedBoardSizeOptionIndex = selectedBoardSizeOption;
+        this.selectedMineCountOptionIndex = selectedMineCountOption;
     }
 
-    public int getSelectedBoardSizeOptionId() {
-        return selectedBoardSizeOptionId;
+    public int getSelectedBoardSizeOptionIndex() {
+        return selectedBoardSizeOptionIndex;
     }
     public int getSelectedMineCountOptionId(){
-        return selectedMineCountOptionId;
+        return selectedMineCountOptionIndex;
     }
 }

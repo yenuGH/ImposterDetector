@@ -2,8 +2,12 @@ package ca.cmpt276.assignment3.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import ca.cmpt276.assignment3.R;
@@ -12,15 +16,33 @@ import ca.cmpt276.assignment3.model.GameOptions;
 public class OptionsMenuActivity extends AppCompatActivity {
 
     // Maybe create a dialog saying that if options were changed and save wasn't clicked and user tries exiting
+    // https://www.youtube.com/watch?v=_yaP4etGKlU
+
+    // Could also add the radio buttons iteratively through code, rather than using xml to place them
 
     // 5.3 - Use SharedPreferences to save options data between application runs
-    // Use Google Gson for this? Game proprties may use LocalDateTime which requires Google Gson for TypeAdapter.
+    // Use Google Gson for this? Game properties may use LocalDateTime which requires Google Gson for TypeAdapter.
 
     // 5.4 - Button for resetting game data for each configuration
+
+    // https://stackoverflow.com/questions/17120199/change-the-circle-color-of-radio-button
+    ColorStateList colorStateList = new ColorStateList(
+            new int[][]
+                    {
+                            new int[]{-android.R.attr.state_enabled}, // Disabled
+                            new int[]{android.R.attr.state_enabled}   // Enabled
+                    },
+            new int[]
+                    {
+                            Color.rgb(255, 255, 255), // disabled
+                            Color.rgb(128, 203, 196)   // enabled
+                    }
+    );
 
     private GameOptions gameOptions;
     private RadioGroup rgBoardSize;
     private RadioGroup rgMineCount;
+
     private int rbSelectedBoardSizeId;
     private int rbSelectedMineCountId;
 
@@ -28,15 +50,54 @@ public class OptionsMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options_menu);
+        //createMineCountButtons();
 
-        gameOptions = GameOptions.getInstance();
         rgBoardSize = findViewById(R.id.rgBoardSize);
         rgMineCount = findViewById(R.id.rgMineCount);
+        gameOptions = GameOptions.getInstance();
+        createBoardSizeButtons();
+        createMineCountButtons();
         setupSaveButton();
 
         // When the options screen is opened, setup the last checked options
-        getGameOptions();
+        //getGameOptions();
 
+    }
+
+    private void createBoardSizeButtons(){
+        int[] boardRowSizes = getResources().getIntArray(R.array.board_row_sizes);
+        int[] boardColumnSizes = getResources().getIntArray(R.array.board_column_sizes);
+
+        for (int i = 0; i < boardRowSizes.length; i++){
+            int rowValue = boardRowSizes[i];
+            int columnValue = boardColumnSizes[i];
+
+            RadioButton radioButton = new RadioButton(OptionsMenuActivity.this);
+            radioButton.setText(rowValue + " rows by " + columnValue + " columns");
+            radioButton.setTextColor(Color.rgb(255, 255, 255));
+            radioButton.setButtonTintList(colorStateList);
+
+            rgBoardSize.addView(radioButton);
+        }
+    }
+
+    private void createMineCountButtons(){
+        int[] mineCount = getResources().getIntArray(R.array.mine_count);
+
+        for (int i = 0; i < mineCount.length; i++){
+            int countValue = mineCount[i];
+
+            RadioButton radioButton = new RadioButton(OptionsMenuActivity.this);
+            radioButton.setText(countValue + " mines");
+            radioButton.setTextColor(Color.rgb(255, 255, 255));
+            radioButton.setButtonTintList(colorStateList);
+
+            radioButton.setOnClickListener(view -> {
+
+            });
+
+            rgMineCount.addView(radioButton);
+        }
     }
 
     private void setupSaveButton(){
@@ -46,32 +107,16 @@ public class OptionsMenuActivity extends AppCompatActivity {
         });
     }
 
-    private void getGameOptions(){
-        int boardSizeOption = gameOptions.getSelectedBoardSizeOptionId();
-        int mineCountOption = gameOptions.getSelectedMineCountOptionId();
-
-        // if either one is set to -1, that means default options have not been saved yet.
-        if (boardSizeOption == -1 || mineCountOption == -1){
-            // If they have not been set, just set the id's to the default selected option
-            rbSelectedBoardSizeId = rgBoardSize.getCheckedRadioButtonId();
-            rbSelectedMineCountId = rgMineCount.getCheckedRadioButtonId();
-            return;
-        }
-
-        // Set the ID's
-        rbSelectedBoardSizeId = boardSizeOption;
-        rbSelectedMineCountId = mineCountOption;
-        // Then set the correlated radio button as checked
-        rgBoardSize.check(rbSelectedBoardSizeId);
-        rgMineCount.check(rbSelectedMineCountId);
-    }
-
     private void saveGameOptions(){
-        // Grab the id's of the selected radio buttons
-        // Pass them into the game options to save
-        rbSelectedBoardSizeId = rgBoardSize.getCheckedRadioButtonId();
-        rbSelectedMineCountId = rgMineCount.getCheckedRadioButtonId();
-        gameOptions.setGameOptions(rbSelectedBoardSizeId, rbSelectedMineCountId);
+        // int index = myRadioGroup.indexOfChild(findViewById(myRadioGroup.getCheckedRadioButtonId()));
+
+        // indexOfChild takes in a View parameter, so we call the findViewById
+        // and pass in the view of the selected radio button ID.
+        int selectedBoardSizeIndex = rgBoardSize.indexOfChild(findViewById(rgBoardSize.getCheckedRadioButtonId()));
+        int selectedMineCountIndex = rgMineCount.indexOfChild(findViewById(rgMineCount.getCheckedRadioButtonId()));
+
+        gameOptions.setGameOptions(selectedBoardSizeIndex, selectedMineCountIndex);
+
     }
 
 }
