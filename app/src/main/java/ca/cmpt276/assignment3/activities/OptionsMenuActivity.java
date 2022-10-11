@@ -87,7 +87,7 @@ public class OptionsMenuActivity extends AppCompatActivity {
 
             rgBoardSize.addView(radioButton);
             // Set the first one to default if first time run
-            if (i == 0 && selectedBoardSizeId == -1){
+            if (i == 0 && selectedBoardSizeId == 0){
                 rgBoardSize.check(radioButton.getId());
             }
 
@@ -113,7 +113,7 @@ public class OptionsMenuActivity extends AppCompatActivity {
 
             rgMineCount.addView(radioButton);
             // Set the first one to default if first time run
-            if (i == 0 && selectedMineCountId == -1){
+            if (i == 0 && selectedMineCountId == 0){
                 rgMineCount.check(radioButton.getId());
             }
 
