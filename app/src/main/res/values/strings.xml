@@ -2,4 +2,6 @@
     <string name="app_name">Assignment3</string>
     <string name="found_mines">Found %d of %d impostors</string>
     <string name="scans_used"># Scans used: %d</string>
+    <string name="help_about"><b>About the Authors</b>\nMade by Jonathan and Alex for <a href="https://opencoursehub.cs.sfu.ca/bfraser/grav-cms/cmpt276/home">CMPT 276</a>\n\n\n<a href="http://google.com">goes here.</a></string>
+    <string name="test">Foo!</string>
 </resources>
