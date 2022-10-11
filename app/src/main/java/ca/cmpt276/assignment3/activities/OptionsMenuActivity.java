@@ -76,7 +76,7 @@ public class OptionsMenuActivity extends AppCompatActivity {
 
             RadioButton radioButton = new RadioButton(OptionsMenuActivity.this);
             radioButton.setId(createCustomKey(RB_BOARD_SIZE_ID_PREFIX) + i);
-            radioButton.setText(rowValue + " rows by " + columnValue + " columns");
+            radioButton.setText(getString(R.string.board_size_text, rowValue, columnValue));
             radioButton.setTextColor(Color.rgb(255, 255, 255));
             radioButton.setButtonTintList(COLORSTATELIST);
 
@@ -103,7 +103,7 @@ public class OptionsMenuActivity extends AppCompatActivity {
 
             RadioButton radioButton = new RadioButton(OptionsMenuActivity.this);
             radioButton.setId(createCustomKey(RB_MINE_COUNT_ID_PREFIX) + i);
-            radioButton.setText(mineCountValue + " mines");
+            radioButton.setText(getString(R.string.mine_count_text, mineCountValue));
             radioButton.setTextColor(Color.rgb(255, 255, 255));
             radioButton.setButtonTintList(COLORSTATELIST);
 
@@ -120,11 +120,12 @@ public class OptionsMenuActivity extends AppCompatActivity {
         }
     }
 
-    private int createCustomKey(@NonNull String key){
+    private int createCustomKey(String key){
         StringBuilder stringKey = new StringBuilder();
         for (int i = 0; i < key.length(); i++){
             stringKey.append(key.charAt(i) - 'a' + 1);
         }
+        // https://stackoverflow.com/questions/54092485/removing-all-non-digits-from-string
         String sbString = stringKey.toString().replaceAll("\\D", "");
         return Integer.parseInt(sbString);
     }
