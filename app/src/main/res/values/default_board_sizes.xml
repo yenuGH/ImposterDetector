@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <integer-array name="board_row_sizes">
+        <item>4</item>
+        <item>5</item>
+        <item>5</item>
+    </integer-array>
+
+    <integer-array name="board_column_sizes">
+        <item>6</item>
+        <item>10</item>
+        <item>15</item>
+    </integer-array>
+    
+</resources>
