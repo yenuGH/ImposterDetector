@@ -218,6 +218,8 @@ public class GameActivity extends AppCompatActivity {
 
         // Refresh the scanned results
         updateScannedButtons();
+
+        updateGameText(5,42, scans, numberOfGamesPlayed);
     }
 
     /**
