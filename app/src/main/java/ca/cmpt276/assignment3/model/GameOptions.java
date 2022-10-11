@@ -23,6 +23,10 @@ public class GameOptions {
         // Set options to -1 when instance is created for the first time
         selectedBoardSizeOptionId = -1;
         selectedMineCountOptionId = -1;
+        // Set the values to their default values
+        rowValue = DEFAULT_ROW_SIZE;
+        columnValue = DEFAULT_COLUMN_SIZE;
+        mineCountValue = DEFAULT_MINE_COUNT;
     }
     public static GameOptions getInstance(){
         if (instance == null){
