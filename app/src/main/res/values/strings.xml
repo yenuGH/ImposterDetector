@@ -2,6 +2,20 @@
     <string name="app_name">Assignment3</string>
     <string name="found_mines">Found %d of %d impostors</string>
     <string name="scans_used"># Scans used: %d</string>
-    <string name="help_about"><b>About the Authors</b>\nMade by Jonathan and Alex for <a href="https://opencoursehub.cs.sfu.ca/bfraser/grav-cms/cmpt276/home">CMPT 276</a>\n\n\n<a href="http://google.com">goes here.</a></string>
+    <string name="help_about">
+
+        <b>About the Authors</b>\n
+        Made by Jonathan and Alex for <a href="https://opencoursehub.cs.sfu.ca/bfraser/grav-cms/cmpt276/home">CMPT 276</a>\n\n
+
+        <b>Game Information</b>\n
+        Find all the impostors hiding on the skeld! Tap on a cell to check for an impostor.\n
+        If no impostor is found, a scan will be performed, showing the number of impostors on the cell\'s row/column.\n
+        If an impostor is found, they\'ll pop up! Once all impostors are found, you win!\n
+        Try to find all the impostors with as few scans as possible.\n\n
+
+        <b>Resource Citations</b>\n
+        We can cite the images/sounds here with fancy <a href="http://https://crouton.net/">hyperlinks</a>
+
+    </string>
     <string name="test">Foo!</string>
 </resources>

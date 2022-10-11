@@ -10,24 +10,21 @@ import android.widget.TextView;
 
 import ca.cmpt276.assignment3.R;
 
+/**
+ * Class containing the help activity, updates the text inside the help activity's
+ * textview.
+ */
 public class HelpActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
+
+        // Get the textview containing the text
         TextView textView = findViewById(R.id.tvHelpText);
-        //textView.setText(R.string.help_about);
+
+        // Make links in the textview clickable
         textView.setMovementMethod(LinkMovementMethod.getInstance());
-
-
-//
-
-        // Make the textview clickable (https://stackoverflow.com/questions/2734270/how-to-make-links-in-a-textview-clickable)
-//        textView.setMovementMethod(LinkMovementMethod.getInstance());
-//        textView.setClickable(true);
-
-//        String text = "<a href='http://www.google.com'> Google </a>";
-//            textView.setText("Foo." + fromHtml(text));
     }
 }
