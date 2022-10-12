@@ -15,10 +15,7 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        setupPlayButton();
-        setupHelpButton();
-        setupOptionsButton();
-
+        setupMenuButtons();
     }
 
     // When the back button is pressed while on the main menu screen
@@ -28,18 +25,17 @@ public class MainMenuActivity extends AppCompatActivity {
         finishAffinity();
     }
 
-    private void setupPlayButton(){
-        ImageButton playButton = findViewById(R.id.ibPlayButton);
-    }
-    private void setupHelpButton(){
-        ImageButton helpButton = findViewById(R.id.ibHelpButton);
-    }
-    private void setupOptionsButton(){
-        ImageButton optionsButton = findViewById(R.id.ibOptionsButton);
-        Intent optionsMenu = new Intent(MainMenuActivity.this, OptionsMenuActivity.class);
-        optionsButton.setOnClickListener( view -> {
-            startActivity(optionsMenu);
-        });
+    private void setupMenuButtons() {
+        setupImageButton(R.id.ibOptionsButton, OptionsMenuActivity.class);
+        setupImageButton(R.id.ibHelpButton, HelpActivity.class);
+        setupImageButton(R.id.ibPlayButton, GameActivity.class);
     }
 
+    private void setupImageButton(int buttonID, Class<?> activityClass) {
+        ImageButton button = findViewById(buttonID);
+        Intent menu = new Intent(MainMenuActivity.this, activityClass);
+        button.setOnClickListener( view -> {
+            startActivity(menu);
+        });
+    }
 }
