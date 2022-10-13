@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +29,8 @@ public class GameActivity extends AppCompatActivity {
     private int numberOfGamesPlayed;
     private int scans = 0;
 
+    MediaPlayer mediaPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +40,7 @@ public class GameActivity extends AppCompatActivity {
 
         populateButtons();
         updateGameText(5,42, scans, numberOfGamesPlayed);
+
     }
 
     /**
@@ -193,7 +197,7 @@ public class GameActivity extends AppCompatActivity {
         // Get the button
         Button button = buttons[row][col];
 
-        // Lock Button Sizes:
+        // Lock Button Sizes
         lockButtonSizes();
 
         // If the button is unscaned, reveal the mine
@@ -209,6 +213,9 @@ public class GameActivity extends AppCompatActivity {
             // Import the resource
             Resources resource = getResources();
             button.setBackground(new BitmapDrawable(resource, scaledBitmap));
+
+            // Play impostor discovered sound
+            playSound(R.raw.impostor_discovered);
         } else {
             performScan(row, col);
         }
@@ -229,8 +236,19 @@ public class GameActivity extends AppCompatActivity {
      */
     private void performScan(int row, int col) {
         scans ++;
-
+        playSound(R.raw.scan_cell);
         // Todo: Game logic here performing a scan
+    }
+
+    private void playSound(int soundID) {
+        // Free the previous mediaplayer if it existed
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), soundID);
+        mediaPlayer.start();
     }
 
     /**
@@ -255,5 +273,4 @@ public class GameActivity extends AppCompatActivity {
             }
         }
     }
-
 }
