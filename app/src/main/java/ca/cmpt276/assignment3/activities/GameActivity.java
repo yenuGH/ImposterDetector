@@ -16,43 +16,61 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ca.cmpt276.assignment3.R;
+import ca.cmpt276.assignment3.model.Game;
+import ca.cmpt276.assignment3.model.GameManager;
 
 /**
  * Activity where the game is played
  */
 public class GameActivity extends AppCompatActivity {
-    private static int NUM_ROWS = 6;
-    private static int NUM_COLUMNS = 15;
+    private int rowNumber;
+    private int columnNumber;
+    private int mineCount;
+    private int foundMineCount;
 
-    Button[][] buttons = new Button[NUM_ROWS][NUM_COLUMNS];
+    GameManager gameManager;
+    Game currentGame;
+
+    Button[][] buttons;
 
     private int numberOfGamesPlayed;
     private int scans = 0;
 
     MediaPlayer mediaPlayer;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        numberOfGamesPlayed = 3;
 
-        populateButtons();
-        updateGameText(5,42, scans, numberOfGamesPlayed);
+        currentGame = new Game();
+        gameManager = GameManager.getInstance();
 
+        numberOfGamesPlayed = gameManager.getGamesPlayed();
+        columnNumber = currentGame.getColumnValue();
+        rowNumber = currentGame.getRowValue();
+        mineCount = currentGame.getTotalMines();
+        foundMineCount = currentGame.getFoundMines();
+
+        buttons = new Button[rowNumber][columnNumber];
+
+        updateGameInfo(foundMineCount, mineCount, scans, numberOfGamesPlayed);
+        populateGrid();
     }
 
     /**
      * Update the game's text fields
-     * @param foundMines Number of mines the player has found
-     * @param totalMines Total number of mines on the game board
-     * @param scansUsed Number of scans the player has used
+     * 
+     * @param foundMines  Number of mines the player has found
+     * @param totalMines  Total number of mines on the game board
+     * @param scansUsed   Number of scans the player has used
      * @param timesPlayed Number of times the player has played a game
      */
-    private void updateGameText(int foundMines, int totalMines, int scansUsed, int timesPlayed) {
+    private void updateGameInfo(int foundMines, int totalMines, int scansUsed, int timesPlayed) {
         // Update the textview displaying the number of mines found/total
-        String foundMinesString = String.format(getString(R.string.found_mines),foundMines,totalMines);
+        String foundMinesString = String.format(getString(R.string.found_mines), foundMines, totalMines);
         updateTextView(R.id.tvFoundMines, foundMinesString);
 
         // Update the textview displaying the number of scans used
@@ -60,14 +78,15 @@ public class GameActivity extends AppCompatActivity {
         updateTextView(R.id.tvScansUsed, scansUsedString);
 
         // Update the textview displaying the number of times a game has been played
-        String timesPlayedString = String.format("Times Played: %d",timesPlayed);
+        String timesPlayedString = String.format("Times Played: %d", timesPlayed);
         updateTextView(R.id.tvTimesPlayed, timesPlayedString);
     }
 
     /**
      * Updates the contents of a textview
+     * 
      * @param textViewID Id of the textview
-     * @param newString String to set the contents of the textview to
+     * @param newString  String to set the contents of the textview to
      */
     private void updateTextView(int textViewID, String newString) {
         TextView textView = findViewById(textViewID);
@@ -75,38 +94,39 @@ public class GameActivity extends AppCompatActivity {
     }
 
     /**
-     * Setup/populate buttons formating and contents
+     * Setup/populate buttons formatting and contents
      */
-    private void populateButtons() {
+    private void populateGrid() {
         // Get the table containing the buttons
         TableLayout table = findViewById(R.id.tlButtons);
 
         // Populate the table with rows
-        for (int row = 0; row < NUM_ROWS; row++) {
+        for (int row = 0; row < rowNumber; row++) {
             // Create a new tablerow to add buttons to
             TableRow tableRow = new TableRow(this);
 
             // Scale the rows to fill the table
-            tableRow.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT, 1.0f));
+            tableRow.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.MATCH_PARENT, 1.0f));
 
             // Add the row to the table
             table.addView(tableRow);
 
             // Populate the row with buttons
-            for (int col = 0; col < NUM_COLUMNS; col++){
+            for (int col = 0; col < columnNumber; col++) {
                 // Create a new button, and add it to the row
                 Button button = new Button(this);
 
                 // Scale the buttons to fill the row
-                button.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT, 1.0f));
+                button.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                        TableRow.LayoutParams.MATCH_PARENT, 1.0f));
 
-                // Debug
-//                button.setText("" + col + "," + row);
 
                 // Stop text from clipping on smaller buttons
                 button.setPadding(0, 0, 0, 0);
 
-                // Create final ints for passing which button has been pressed into the inner class
+                // Create final ints for passing which button has been pressed into the inner
+                // class
                 final int FINAL_COLUMN = col;
                 final int FINAL_ROW = row;
 
@@ -114,7 +134,7 @@ public class GameActivity extends AppCompatActivity {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        gridButtonClicked(FINAL_COLUMN, FINAL_ROW);
+                        gridButtonClicked(FINAL_ROW, FINAL_COLUMN);
                     }
                 });
 
@@ -133,12 +153,12 @@ public class GameActivity extends AppCompatActivity {
      */
     private void updateScannedButtons() {
         // Iterate through every button, update their scanned text
-        for (int row = 0; row < NUM_ROWS; row++) {
-            for (int col = 0; col < NUM_COLUMNS; col++) {
+        for (int row = 0; row < rowNumber; row++) {
+            for (int col = 0; col < columnNumber; col++) {
                 // If a button has been scanned, update the number of mines inside it
-                if (isButtonScanned(row, col)) {
+                if (currentGame.isScanned(row, col)) {
                     Button button = buttons[row][col];
-                    int mineCount = getMinesFromCell(row, col);
+                    int mineCount = currentGame.getAdjacentMines(row, col);
                     button.setText("" + mineCount);
                 }
             }
@@ -146,48 +166,14 @@ public class GameActivity extends AppCompatActivity {
     }
 
     /**
-     * Checks if a cell is a mine
-     * @param row Row of the cell
-     * @param col Column of the cell
-     * @return True/False if the cell is a mine or not
-     */
-    private boolean isButtonMine(int row, int col) {
-        // Todo: get if the button is a mine through the game model
-        return false;
-    }
-
-    /**
-     * Checks if a cell has been scanned
-     * @param row Row of the cell
-     * @param col Column of the cell
-     * @return True/False if the cell has been scanned
-     */
-    private boolean isButtonScanned(int row, int col) {
-        // Todo: get if the button has been scanned through game model
-        return false;
-    }
-
-    /**
-     * Gets the adjacent mines from a cell
-     * @param row Row of the cell
-     * @param col Column of the cell
-     * @return Number of mines in the cell's row/column
-     */
-    private int getMinesFromCell(int row, int col) {
-        // Todo: get the number of mines in adjacent cells through game model
-        return -1;
-    }
-
-
-
-    /**
      * Handle a grid button being clicked
+     * 
      * @param col The column the button was clicked in
      * @param row The row the button was clicked in
      */
-    private void gridButtonClicked(int col, int row) {
+    private void gridButtonClicked(int row, int col) {
         // Do nothing if the button has already been scanned
-        if (isButtonScanned(col, row)) {
+        if (currentGame.isScanned(row, col)) {
             return;
         }
 
@@ -200,8 +186,12 @@ public class GameActivity extends AppCompatActivity {
         // Lock Button Sizes
         lockButtonSizes();
 
-        // If the button is unscaned, reveal the mine
-        if (isButtonMine(row, col) && !isButtonScanned(row, col)) {
+        interactWithCell(row, col);
+        // If mine was found, update foundMineCount
+        foundMineCount = currentGame.getFoundMines();
+
+        // If the button is unscanned, reveal the mine
+        if (currentGame.isMine(row, col)) {
             // Get the size of the button
             int width = button.getWidth();
             int height = button.getHeight();
@@ -217,27 +207,24 @@ public class GameActivity extends AppCompatActivity {
             // Play impostor discovered sound
             playSound(R.raw.impostor_discovered);
         } else {
-            performScan(row, col);
+            playSound(R.raw.scan_cell);
         }
-
-        // Debug clear the button text
-        button.setText("5");
 
         // Refresh the scanned results
         updateScannedButtons();
 
-        updateGameText(5,42, scans, numberOfGamesPlayed);
+        updateGameInfo(foundMineCount, mineCount, scans, numberOfGamesPlayed);
     }
 
     /**
      * Marks a cell as scanned
+     * 
      * @param row Row of the cell that was scanned
      * @param col Column of the cell that was scanned
      */
-    private void performScan(int row, int col) {
-        scans ++;
-        playSound(R.raw.scan_cell);
-        // Todo: Game logic here performing a scan
+    private void interactWithCell(int row, int col) {
+        currentGame.interactCell(row, col);
+        scans = currentGame.getScans();
     }
 
     private void playSound(int soundID) {
@@ -257,8 +244,8 @@ public class GameActivity extends AppCompatActivity {
      */
     private void lockButtonSizes() {
         // Iterate through every button, lock their sizes
-        for (int row = 0; row < NUM_ROWS; row++) {
-            for (int col = 0; col < NUM_COLUMNS; col++) {
+        for (int row = 0; row < rowNumber; row++) {
+            for (int col = 0; col < columnNumber; col++) {
                 Button button = buttons[row][col];
 
                 // Lock the width of the button

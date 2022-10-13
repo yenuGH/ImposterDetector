@@ -10,9 +10,6 @@ import ca.cmpt276.assignment3.activities.MainMenuActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
