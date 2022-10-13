@@ -22,9 +22,10 @@ import ca.cmpt276.assignment3.model.Game;
  * Activity where the game is played
  */
 public class GameActivity extends AppCompatActivity {
-    private int rowNumber = 6;
-    private int columnNumber = 15;
+    private int rowNumber;
+    private int columnNumber;
 
+    Game currentGame;
     Button[][] buttons;
 
     private int numberOfGamesPlayed;
@@ -32,7 +33,6 @@ public class GameActivity extends AppCompatActivity {
 
     MediaPlayer mediaPlayer;
 
-    Game currentGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +41,14 @@ public class GameActivity extends AppCompatActivity {
 
         numberOfGamesPlayed = 3;
 
-        updateGameText(5, 42, scans, numberOfGamesPlayed);
+        updateGameInfo(5, 42, scans, numberOfGamesPlayed);
 
         currentGame = new Game();
         columnNumber = currentGame.getColumnValue();
         rowNumber = currentGame.getRowValue();
         buttons = new Button[rowNumber][columnNumber];
 
-        populateButtons();
+        populateGrid();
     }
 
     /**
@@ -59,7 +59,7 @@ public class GameActivity extends AppCompatActivity {
      * @param scansUsed   Number of scans the player has used
      * @param timesPlayed Number of times the player has played a game
      */
-    private void updateGameText(int foundMines, int totalMines, int scansUsed, int timesPlayed) {
+    private void updateGameInfo(int foundMines, int totalMines, int scansUsed, int timesPlayed) {
         // Update the textview displaying the number of mines found/total
         String foundMinesString = String.format(getString(R.string.found_mines), foundMines, totalMines);
         updateTextView(R.id.tvFoundMines, foundMinesString);
@@ -85,9 +85,9 @@ public class GameActivity extends AppCompatActivity {
     }
 
     /**
-     * Setup/populate buttons formating and contents
+     * Setup/populate buttons formatting and contents
      */
-    private void populateButtons() {
+    private void populateGrid() {
         // Get the table containing the buttons
         TableLayout table = findViewById(R.id.tlButtons);
 
@@ -112,8 +112,6 @@ public class GameActivity extends AppCompatActivity {
                 button.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                         TableRow.LayoutParams.MATCH_PARENT, 1.0f));
 
-                // Debug
-                // button.setText("" + col + "," + row);
 
                 // Stop text from clipping on smaller buttons
                 button.setPadding(0, 0, 0, 0);
@@ -127,7 +125,7 @@ public class GameActivity extends AppCompatActivity {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        gridButtonClicked(FINAL_COLUMN, FINAL_ROW);
+                        gridButtonClicked(FINAL_ROW, FINAL_COLUMN);
                     }
                 });
 
@@ -164,7 +162,7 @@ public class GameActivity extends AppCompatActivity {
      * @param col The column the button was clicked in
      * @param row The row the button was clicked in
      */
-    private void gridButtonClicked(int col, int row) {
+    private void gridButtonClicked(int row, int col) {
         // Do nothing if the button has already been scanned
         if (currentGame.isScanned(row, col)) {
             return;
@@ -204,7 +202,7 @@ public class GameActivity extends AppCompatActivity {
         // Refresh the scanned results
         updateScannedButtons();
 
-        updateGameText(5, 42, scans, numberOfGamesPlayed);
+        updateGameInfo(5, 42, scans, numberOfGamesPlayed);
     }
 
     /**
