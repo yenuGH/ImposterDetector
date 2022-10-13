@@ -40,6 +40,8 @@ public class Game {
         rows = gameOptions.getRowValue();
         columns = gameOptions.getColumnValue();
         cells = new CellType[rows][columns];
+
+        placeMines();
     }
 
     public int getRowValue() {
@@ -96,7 +98,8 @@ public class Game {
     }
 
     public boolean isMine(int row, int column) {
-        return (cells[row][column] == CellType.UNSCANNED_MINE || cells[row][column] == CellType.SCANNED_MINE);
+        return (cells[row][column] == CellType.UNSCANNED_MINE || cells[row][column] == CellType.SCANNED_MINE
+                || cells[row][column] == CellType.REVEALED_MINE);
     }
 
     public boolean isScanned(int row, int column) {
@@ -171,7 +174,7 @@ public class Game {
         return mineFoundCount;
     }
 
-    public int gNumberOfScansUsed() {
+    public int getNumberOfScansUsed() {
         return totalScans;
     }
 

@@ -1,5 +1,7 @@
 package ca.cmpt276.assignment3.model;
 
+import java.util.ArrayList;
+
 /*
     Stores a list of games played, along with 
     Gets highest score for each game type
@@ -32,19 +34,24 @@ public class GameManager {
      * through list of games and find one with the highest score
      */
     public Game findBestScoringGame(int rowNumber, int columnNumber, int mineNumber) {
-        Game topScore;
+        Game topScore = null;
 
         // Iterate through all played games
         for (Game game : games) {
             // Does the game match the parameters we're looking for?
-            if (game.getRowValue() == rowNumber && game.getColumnValue() == columnNumber && game.getTotalMines()) {
+            if (game.getRowValue() == rowNumber && game.getColumnValue() == columnNumber && game.getTotalMines() == mineNumber) {
                 // Compare the scores
-                int currentTopScore = topScore.getScans();
-                int newScore = game.getScans();
-
-                // Replace the old score if the new one is higher
-                if (newScore > currentTopScore) {
+                if (topScore == null){
                     topScore = game;
+                }
+                else {
+                    int currentTopScore = topScore.getScans();
+                    int newScore = game.getScans();
+
+                    // Replace the old score if the new one is higher
+                    if (newScore > currentTopScore) {
+                        topScore = game;
+                    }
                 }
             }
         }

@@ -22,10 +22,10 @@ import ca.cmpt276.assignment3.model.Game;
  * Activity where the game is played
  */
 public class GameActivity extends AppCompatActivity {
-    private static int NUM_ROWS = 6;
-    private static int NUM_COLUMNS = 15;
+    private int rowNumber = 6;
+    private int columnNumber = 15;
 
-    Button[][] buttons = new Button[NUM_ROWS][NUM_COLUMNS];
+    Button[][] buttons;
 
     private int numberOfGamesPlayed;
     private int scans = 0;
@@ -41,10 +41,14 @@ public class GameActivity extends AppCompatActivity {
 
         numberOfGamesPlayed = 3;
 
-        populateButtons();
         updateGameText(5, 42, scans, numberOfGamesPlayed);
 
         currentGame = new Game();
+        columnNumber = currentGame.getColumnValue();
+        rowNumber = currentGame.getRowValue();
+        buttons = new Button[rowNumber][columnNumber];
+
+        populateButtons();
     }
 
     /**
@@ -88,7 +92,7 @@ public class GameActivity extends AppCompatActivity {
         TableLayout table = findViewById(R.id.tlButtons);
 
         // Populate the table with rows
-        for (int row = 0; row < NUM_ROWS; row++) {
+        for (int row = 0; row < rowNumber; row++) {
             // Create a new tablerow to add buttons to
             TableRow tableRow = new TableRow(this);
 
@@ -100,7 +104,7 @@ public class GameActivity extends AppCompatActivity {
             table.addView(tableRow);
 
             // Populate the row with buttons
-            for (int col = 0; col < NUM_COLUMNS; col++) {
+            for (int col = 0; col < columnNumber; col++) {
                 // Create a new button, and add it to the row
                 Button button = new Button(this);
 
@@ -142,8 +146,8 @@ public class GameActivity extends AppCompatActivity {
      */
     private void updateScannedButtons() {
         // Iterate through every button, update their scanned text
-        for (int row = 0; row < NUM_ROWS; row++) {
-            for (int col = 0; col < NUM_COLUMNS; col++) {
+        for (int row = 0; row < rowNumber; row++) {
+            for (int col = 0; col < columnNumber; col++) {
                 // If a button has been scanned, update the number of mines inside it
                 if (currentGame.isScanned(row, col)) {
                     Button button = buttons[row][col];
@@ -162,7 +166,7 @@ public class GameActivity extends AppCompatActivity {
      */
     private void gridButtonClicked(int col, int row) {
         // Do nothing if the button has already been scanned
-        if (currentGame.isScanned(col, row)) {
+        if (currentGame.isScanned(row, col)) {
             return;
         }
 
@@ -175,8 +179,10 @@ public class GameActivity extends AppCompatActivity {
         // Lock Button Sizes
         lockButtonSizes();
 
+        interactWithCell(row, col);
+
         // If the button is unscaned, reveal the mine
-        if (currentGame.isMine(row, col) && !currentGame.isScanned(row, col)) {
+        if (currentGame.isMine(row, col)) {
             // Get the size of the button
             int width = button.getWidth();
             int height = button.getHeight();
@@ -192,11 +198,8 @@ public class GameActivity extends AppCompatActivity {
             // Play impostor discovered sound
             playSound(R.raw.impostor_discovered);
         } else {
-            performScan(row, col);
+            playSound(R.raw.scan_cell);
         }
-
-        // Debug clear the button text
-        button.setText("5");
 
         // Refresh the scanned results
         updateScannedButtons();
@@ -210,10 +213,9 @@ public class GameActivity extends AppCompatActivity {
      * @param row Row of the cell that was scanned
      * @param col Column of the cell that was scanned
      */
-    private void performScan(int row, int col) {
-        scans++;
-        playSound(R.raw.scan_cell);
-        // Todo: Game logic here performing a scan
+    private void interactWithCell(int row, int col) {
+        currentGame.interactCell(row, col);
+        scans = currentGame.getScans();
     }
 
     private void playSound(int soundID) {
@@ -233,8 +235,8 @@ public class GameActivity extends AppCompatActivity {
      */
     private void lockButtonSizes() {
         // Iterate through every button, lock their sizes
-        for (int row = 0; row < NUM_ROWS; row++) {
-            for (int col = 0; col < NUM_COLUMNS; col++) {
+        for (int row = 0; row < rowNumber; row++) {
+            for (int col = 0; col < columnNumber; col++) {
                 Button button = buttons[row][col];
 
                 // Lock the width of the button
