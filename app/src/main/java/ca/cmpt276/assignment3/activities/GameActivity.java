@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ca.cmpt276.assignment3.R;
+import ca.cmpt276.assignment3.model.Game;
 
 /**
  * Activity where the game is played
@@ -31,6 +32,8 @@ public class GameActivity extends AppCompatActivity {
 
     MediaPlayer mediaPlayer;
 
+    Game currentGame;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +44,7 @@ public class GameActivity extends AppCompatActivity {
         populateButtons();
         updateGameText(5, 42, scans, numberOfGamesPlayed);
 
+        currentGame = new Game();
     }
 
     /**
@@ -141,49 +145,13 @@ public class GameActivity extends AppCompatActivity {
         for (int row = 0; row < NUM_ROWS; row++) {
             for (int col = 0; col < NUM_COLUMNS; col++) {
                 // If a button has been scanned, update the number of mines inside it
-                if (isButtonScanned(row, col)) {
+                if (currentGame.isScanned(row, col)) {
                     Button button = buttons[row][col];
-                    int mineCount = getMinesFromCell(row, col);
+                    int mineCount = currentGame.getAdjacentMines(row, col);
                     button.setText("" + mineCount);
                 }
             }
         }
-    }
-
-    /**
-     * Checks if a cell is a mine
-     * 
-     * @param row Row of the cell
-     * @param col Column of the cell
-     * @return True/False if the cell is a mine or not
-     */
-    private boolean isButtonMine(int row, int col) {
-        // Todo: get if the button is a mine through the game model
-        return false;
-    }
-
-    /**
-     * Checks if a cell has been scanned
-     * 
-     * @param row Row of the cell
-     * @param col Column of the cell
-     * @return True/False if the cell has been scanned
-     */
-    private boolean isButtonScanned(int row, int col) {
-        // Todo: get if the button has been scanned through game model
-        return false;
-    }
-
-    /**
-     * Gets the adjacent mines from a cell
-     * 
-     * @param row Row of the cell
-     * @param col Column of the cell
-     * @return Number of mines in the cell's row/column
-     */
-    private int getMinesFromCell(int row, int col) {
-        // Todo: get the number of mines in adjacent cells through game model
-        return -1;
     }
 
     /**
@@ -194,7 +162,7 @@ public class GameActivity extends AppCompatActivity {
      */
     private void gridButtonClicked(int col, int row) {
         // Do nothing if the button has already been scanned
-        if (isButtonScanned(col, row)) {
+        if (currentGame.isScanned(col, row)) {
             return;
         }
 
@@ -208,7 +176,7 @@ public class GameActivity extends AppCompatActivity {
         lockButtonSizes();
 
         // If the button is unscaned, reveal the mine
-        if (isButtonMine(row, col) && !isButtonScanned(row, col)) {
+        if (currentGame.isMine(row, col) && !currentGame.isScanned(row, col)) {
             // Get the size of the button
             int width = button.getWidth();
             int height = button.getHeight();

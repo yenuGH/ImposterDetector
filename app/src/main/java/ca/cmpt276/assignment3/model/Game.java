@@ -35,10 +35,11 @@ public class Game {
     int rows, columns;
 
     public Game() {
-        gameOptions = GameOptions.getInstance();
+        GameOptions gameOptions = GameOptions.getInstance();
         totalMines = gameOptions.getMineCountValue();
         rows = gameOptions.getRowValue();
         columns = gameOptions.getColumnValue();
+        cells = new CellType[rows][columns];
     }
 
     public int getRowValue() {
@@ -111,12 +112,9 @@ public class Game {
     }
 
     private void placeMines() {
-        int rowValue = gameOptions.getRowValue();
-        int columnValue = gameOptions.getColumnValue();
-
         // Clear cells with default values
-        for (int row = 0; row < rowValue; row++) {
-            for (int column = 0; column < columnValue; column++) {
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
                 cells[row][column] = CellType.UNSCANNED;
             }
         }
@@ -126,8 +124,8 @@ public class Game {
         int minesToPlace = totalMines;
 
         while (minesToPlace > 0) {
-            int row = random.nextInt(rowValue - 1);
-            int column = random.nextInt(columnValue - 1);
+            int row = random.nextInt(rows - 1);
+            int column = random.nextInt(columns - 1);
 
             // If the cell is empty place the mine
             if ((cells[row][column]) == CellType.UNSCANNED) {
@@ -138,18 +136,16 @@ public class Game {
     }
 
     public int getAdjacentMines(int row, int column) {
-        int rowValue = gameOptions.getRowValue();
-        int columnValue = gameOptions.getColumnValue();
         int adjacentMineCount = 0;
 
         // check the row
-        for (int i = 0; i < columnValue; i++) {
+        for (int i = 0; i < columns; i++) {
             if (cells[row][i] == CellType.UNSCANNED_MINE) {
                 adjacentMineCount++;
             }
         }
         // check the column
-        for (int i = 0; i < rowValue; i++) {
+        for (int i = 0; i < rows; i++) {
             if (cells[i][column] == CellType.UNSCANNED_MINE) {
                 adjacentMineCount++;
             }
@@ -159,16 +155,12 @@ public class Game {
     }
 
     public int numberOfMinesFound() {
-        int rowValue = gameOptions.getRowValue();
-        int columnValue = gameOptions.getColumnValue();
-        int mineCount = gameOptions.getMineCountValue();
-
         int mineFoundCount = 0;
 
         // Iterate through each column and row and check if cells are revealed mines
         // If so, increment the mineFoundCount
-        for (int row = 0; row < rowValue; row++) {
-            for (int column = 0; column < columnValue; column++) {
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
                 CellType cell = cells[row][column];
                 if (cell == CellType.REVEALED_MINE) {
                     mineFoundCount++;
