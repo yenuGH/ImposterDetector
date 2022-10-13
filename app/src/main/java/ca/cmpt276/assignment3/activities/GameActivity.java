@@ -17,8 +17,6 @@ import android.widget.Toast;
 
 import ca.cmpt276.assignment3.R;
 
-
-
 /**
  * Activity where the game is played
  */
@@ -41,20 +39,21 @@ public class GameActivity extends AppCompatActivity {
         numberOfGamesPlayed = 3;
 
         populateButtons();
-        updateGameText(5,42, scans, numberOfGamesPlayed);
+        updateGameText(5, 42, scans, numberOfGamesPlayed);
 
     }
 
     /**
      * Update the game's text fields
-     * @param foundMines Number of mines the player has found
-     * @param totalMines Total number of mines on the game board
-     * @param scansUsed Number of scans the player has used
+     * 
+     * @param foundMines  Number of mines the player has found
+     * @param totalMines  Total number of mines on the game board
+     * @param scansUsed   Number of scans the player has used
      * @param timesPlayed Number of times the player has played a game
      */
     private void updateGameText(int foundMines, int totalMines, int scansUsed, int timesPlayed) {
         // Update the textview displaying the number of mines found/total
-        String foundMinesString = String.format(getString(R.string.found_mines),foundMines,totalMines);
+        String foundMinesString = String.format(getString(R.string.found_mines), foundMines, totalMines);
         updateTextView(R.id.tvFoundMines, foundMinesString);
 
         // Update the textview displaying the number of scans used
@@ -62,14 +61,15 @@ public class GameActivity extends AppCompatActivity {
         updateTextView(R.id.tvScansUsed, scansUsedString);
 
         // Update the textview displaying the number of times a game has been played
-        String timesPlayedString = String.format("Times Played: %d",timesPlayed);
+        String timesPlayedString = String.format("Times Played: %d", timesPlayed);
         updateTextView(R.id.tvTimesPlayed, timesPlayedString);
     }
 
     /**
      * Updates the contents of a textview
+     * 
      * @param textViewID Id of the textview
-     * @param newString String to set the contents of the textview to
+     * @param newString  String to set the contents of the textview to
      */
     private void updateTextView(int textViewID, String newString) {
         TextView textView = findViewById(textViewID);
@@ -89,26 +89,29 @@ public class GameActivity extends AppCompatActivity {
             TableRow tableRow = new TableRow(this);
 
             // Scale the rows to fill the table
-            tableRow.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT, 1.0f));
+            tableRow.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.MATCH_PARENT, 1.0f));
 
             // Add the row to the table
             table.addView(tableRow);
 
             // Populate the row with buttons
-            for (int col = 0; col < NUM_COLUMNS; col++){
+            for (int col = 0; col < NUM_COLUMNS; col++) {
                 // Create a new button, and add it to the row
                 Button button = new Button(this);
 
                 // Scale the buttons to fill the row
-                button.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT, 1.0f));
+                button.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                        TableRow.LayoutParams.MATCH_PARENT, 1.0f));
 
                 // Debug
-//                button.setText("" + col + "," + row);
+                // button.setText("" + col + "," + row);
 
                 // Stop text from clipping on smaller buttons
                 button.setPadding(0, 0, 0, 0);
 
-                // Create final ints for passing which button has been pressed into the inner class
+                // Create final ints for passing which button has been pressed into the inner
+                // class
                 final int FINAL_COLUMN = col;
                 final int FINAL_ROW = row;
 
@@ -149,6 +152,7 @@ public class GameActivity extends AppCompatActivity {
 
     /**
      * Checks if a cell is a mine
+     * 
      * @param row Row of the cell
      * @param col Column of the cell
      * @return True/False if the cell is a mine or not
@@ -160,6 +164,7 @@ public class GameActivity extends AppCompatActivity {
 
     /**
      * Checks if a cell has been scanned
+     * 
      * @param row Row of the cell
      * @param col Column of the cell
      * @return True/False if the cell has been scanned
@@ -171,6 +176,7 @@ public class GameActivity extends AppCompatActivity {
 
     /**
      * Gets the adjacent mines from a cell
+     * 
      * @param row Row of the cell
      * @param col Column of the cell
      * @return Number of mines in the cell's row/column
@@ -180,10 +186,9 @@ public class GameActivity extends AppCompatActivity {
         return -1;
     }
 
-
-
     /**
      * Handle a grid button being clicked
+     * 
      * @param col The column the button was clicked in
      * @param row The row the button was clicked in
      */
@@ -228,16 +233,17 @@ public class GameActivity extends AppCompatActivity {
         // Refresh the scanned results
         updateScannedButtons();
 
-        updateGameText(5,42, scans, numberOfGamesPlayed);
+        updateGameText(5, 42, scans, numberOfGamesPlayed);
     }
 
     /**
      * Marks a cell as scanned
+     * 
      * @param row Row of the cell that was scanned
      * @param col Column of the cell that was scanned
      */
     private void performScan(int row, int col) {
-        scans ++;
+        scans++;
         playSound(R.raw.scan_cell);
         // Todo: Game logic here performing a scan
     }

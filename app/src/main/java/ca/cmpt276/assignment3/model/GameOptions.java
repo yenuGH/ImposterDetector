@@ -17,6 +17,7 @@ public class GameOptions {
 
     // Singleton support for options
     private static GameOptions instance;
+
     private GameOptions() {
         // Private to prevent anything else instantiating this
 
@@ -28,14 +29,15 @@ public class GameOptions {
         columnValue = DEFAULT_COLUMN_SIZE;
         mineCountValue = DEFAULT_MINE_COUNT;
     }
-    public static GameOptions getInstance(){
-        if (instance == null){
+
+    public static GameOptions getInstance() {
+        if (instance == null) {
             instance = new GameOptions();
         }
         return instance;
     }
 
-    public void setGameOptions(int boardSizeId, int mineCountId, int rowValue, int columnValue, int mineCountValue){
+    public void setGameOptions(int boardSizeId, int mineCountId, int rowValue, int columnValue, int mineCountValue) {
         // These values are used when we set up the options screen again
         // So we can set the checked button to the proper button ID
         this.selectedBoardSizeOptionId = boardSizeId;

@@ -1,7 +1,54 @@
 package ca.cmpt276.assignment3.model;
 
+/*
+    Stores a list of games played, along with 
+    Gets highest score for each game type
+    Delete highscore for game configuration
+*/
 public class GameManager {
+    ArrayList<Game> games;
+    Game lastGameState; // Saved game state for if the application is closed mid-game
+    int gamesPlayed;
 
+    public GameManager() {
+        games = new ArrayList<>();
+    }
 
+    public void addGame(Game game) {
+        games.add(game);
+    }
 
+    public void resetGamesPlayed() {
+        gamesPlayed = 0;
+        games.clear();
+    }
+
+    public void resetBestScoringGame(int rowNumber, int columnNumber, int mineNumber) {
+        games.remove(findBestScoringGame(rowNumber, columnNumber, mineNumber));
+    }
+
+    /**
+     * Pass in parameters of game you want to look for, will iterate
+     * through list of games and find one with the highest score
+     */
+    public Game findBestScoringGame(int rowNumber, int columnNumber, int mineNumber) {
+        Game topScore;
+
+        // Iterate through all played games
+        for (Game game : games) {
+            // Does the game match the parameters we're looking for?
+            if (game.getRowValue() == rowNumber && game.getColumnValue() == columnNumber && game.getTotalMines()) {
+                // Compare the scores
+                int currentTopScore = topScore.getScans();
+                int newScore = game.getScans();
+
+                // Replace the old score if the new one is higher
+                if (newScore > currentTopScore) {
+                    topScore = game;
+                }
+            }
+        }
+
+        return topScore;
+    }
 }
