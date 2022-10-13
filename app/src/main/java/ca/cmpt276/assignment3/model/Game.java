@@ -56,6 +56,23 @@ public class Game {
         return totalMines;
     }
 
+    public int getFoundMines() {
+        int mineFoundCount = 0;
+
+        // Iterate through each column and row and check if cells are revealed mines
+        // If so, increment the mineFoundCount
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                CellType cell = cells[row][column];
+                if (cell == CellType.REVEALED_MINE) {
+                    mineFoundCount++;
+                }
+            }
+        }
+
+        return mineFoundCount;
+    }
+
     public int getScans() {
         return totalScans;
     }
@@ -106,10 +123,6 @@ public class Game {
         return (cells[row][column] == CellType.SCANNED_MINE || cells[row][column] == CellType.SCANNED);
     }
 
-    public int numberOfMinesTotal() {
-        return totalMines;
-    }
-
     public boolean gameWon() {
         return (totalMines == foundMines);
     }
@@ -155,27 +168,6 @@ public class Game {
         }
 
         return adjacentMineCount;
-    }
-
-    public int numberOfMinesFound() {
-        int mineFoundCount = 0;
-
-        // Iterate through each column and row and check if cells are revealed mines
-        // If so, increment the mineFoundCount
-        for (int row = 0; row < rows; row++) {
-            for (int column = 0; column < columns; column++) {
-                CellType cell = cells[row][column];
-                if (cell == CellType.REVEALED_MINE) {
-                    mineFoundCount++;
-                }
-            }
-        }
-
-        return mineFoundCount;
-    }
-
-    public int getNumberOfScansUsed() {
-        return totalScans;
     }
 
 }

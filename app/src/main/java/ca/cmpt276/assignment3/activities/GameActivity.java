@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import ca.cmpt276.assignment3.R;
 import ca.cmpt276.assignment3.model.Game;
+import ca.cmpt276.assignment3.model.GameManager;
 
 /**
  * Activity where the game is played
@@ -24,8 +25,12 @@ import ca.cmpt276.assignment3.model.Game;
 public class GameActivity extends AppCompatActivity {
     private int rowNumber;
     private int columnNumber;
+    private int mineCount;
+    private int foundMineCount;
 
+    GameManager gameManager;
     Game currentGame;
+
     Button[][] buttons;
 
     private int numberOfGamesPlayed;
@@ -39,15 +44,19 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        numberOfGamesPlayed = 3;
-
-        updateGameInfo(5, 42, scans, numberOfGamesPlayed);
 
         currentGame = new Game();
+        gameManager = GameManager.getInstance();
+
+        numberOfGamesPlayed = gameManager.getGamesPlayed();
         columnNumber = currentGame.getColumnValue();
         rowNumber = currentGame.getRowValue();
+        mineCount = currentGame.getTotalMines();
+        foundMineCount = currentGame.getFoundMines();
+
         buttons = new Button[rowNumber][columnNumber];
 
+        updateGameInfo(foundMineCount, mineCount, scans, numberOfGamesPlayed);
         populateGrid();
     }
 
@@ -178,8 +187,10 @@ public class GameActivity extends AppCompatActivity {
         lockButtonSizes();
 
         interactWithCell(row, col);
+        // If mine was found, update foundMineCount
+        foundMineCount = currentGame.getFoundMines();
 
-        // If the button is unscaned, reveal the mine
+        // If the button is unscanned, reveal the mine
         if (currentGame.isMine(row, col)) {
             // Get the size of the button
             int width = button.getWidth();
@@ -202,7 +213,7 @@ public class GameActivity extends AppCompatActivity {
         // Refresh the scanned results
         updateScannedButtons();
 
-        updateGameInfo(5, 42, scans, numberOfGamesPlayed);
+        updateGameInfo(foundMineCount, mineCount, scans, numberOfGamesPlayed);
     }
 
     /**

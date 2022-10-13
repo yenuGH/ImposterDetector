@@ -12,13 +12,26 @@ public class GameManager {
     Game lastGameState; // Saved game state for if the application is closed mid-game
     int gamesPlayed;
 
-    public GameManager() {
+    // Singleton support for options
+    private static GameManager instance;
+
+    private GameManager() {
+        // Private to prevent anything else instantiating this
         games = new ArrayList<>();
+    }
+
+    public static GameManager getInstance() {
+        if (instance == null) {
+            instance = new GameManager();
+        }
+        return instance;
     }
 
     public void addGame(Game game) {
         games.add(game);
     }
+
+    public int getGamesPlayed(){ return gamesPlayed; }
 
     public void resetGamesPlayed() {
         gamesPlayed = 0;
