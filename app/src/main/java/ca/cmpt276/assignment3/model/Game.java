@@ -136,8 +136,8 @@ public class Game {
         int minesToPlace = totalMines;
 
         while (minesToPlace > 0) {
-            int row = random.nextInt(rows - 1);
-            int column = random.nextInt(columns - 1);
+            int row = random.nextInt(rows);
+            int column = random.nextInt(columns);
 
             // If the cell is empty place the mine
             if ((cells[row][column]) == CellType.UNSCANNED) {
