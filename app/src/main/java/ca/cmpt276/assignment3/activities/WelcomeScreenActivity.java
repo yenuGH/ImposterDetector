@@ -12,6 +12,8 @@ import ca.cmpt276.assignment3.R;
 
 public class WelcomeScreenActivity extends AppCompatActivity {
 
+    private boolean isSkipped = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,13 +21,16 @@ public class WelcomeScreenActivity extends AppCompatActivity {
 
         Button skipWelcome = findViewById(R.id.btnSkipWelcome);
         skipWelcome.setOnClickListener( view -> {
+            isSkipped = true;
             launchMainMenu();
             finish();
         });
 
         new Handler().postDelayed(() -> {
-            launchMainMenu();
-            finish();
+            if (!isSkipped){
+                launchMainMenu();
+                finish();
+            }
         }, 10000);
 
     }
