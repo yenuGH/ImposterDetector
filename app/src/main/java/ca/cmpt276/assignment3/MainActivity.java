@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ActivityManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 
+import ca.cmpt276.assignment3.activities.GameActivity;
 import ca.cmpt276.assignment3.activities.MainMenuActivity;
 import ca.cmpt276.assignment3.activities.WelcomeScreenActivity;
+import ca.cmpt276.assignment3.model.Game;
 
 public class MainActivity extends AppCompatActivity {
 
