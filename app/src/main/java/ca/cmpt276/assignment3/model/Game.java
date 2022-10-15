@@ -123,10 +123,6 @@ public class Game {
         return (cells[row][column] == CellType.SCANNED_MINE || cells[row][column] == CellType.SCANNED);
     }
 
-    public boolean gameWon() {
-        return (totalMines == foundMines);
-    }
-
     private void placeMines() {
         // Clear cells with default values
         for (int row = 0; row < rows; row++) {
