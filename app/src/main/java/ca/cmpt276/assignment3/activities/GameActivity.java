@@ -214,9 +214,14 @@ public class GameActivity extends AppCompatActivity {
         } else {
 
             // Animation tutorial: https://www.youtube.com/watch?v=JvyA7seYiCI
-            // Flash cell
-            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fade_out);
-            button.setAnimation(animation);
+            // Flash cells in row/column
+            for (int i = 0; i < rowNumber; i++) {
+                flashCell(row,col, i, col);
+            }
+
+            for (int i = 0; i < columnNumber; i++) {
+                flashCell(row,col, row,i);
+            }
 
             // Play scan sound
             playSound(R.raw.scan_cell);
@@ -232,6 +237,14 @@ public class GameActivity extends AppCompatActivity {
         }
 
         updateGameInfo(foundMineCount, mineCount, scans, numberOfGamesPlayed);
+    }
+
+    private void flashCell(int originRow, int originCol, int row, int col) {
+        Button button = buttons[row][col];
+        Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
+        int distanceFromOrigin = Math.abs(row-originRow) + Math.abs(col-originCol);
+        animation.setStartOffset(100*distanceFromOrigin);
+        button.setAnimation(animation);
     }
 
     /**

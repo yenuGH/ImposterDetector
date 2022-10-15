@@ -24,6 +24,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Found 0 of 4 Impostors"
+        android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,6 +36,7 @@
         android:layout_marginEnd="16dp"
         android:text="# Scans used:"
         android:textAlignment="textEnd"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,6 +48,7 @@
         android:layout_marginBottom="16dp"
         android:text="Times Played:"
         android:textAlignment="textEnd"
+        android:textColor="#F8F8F8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
