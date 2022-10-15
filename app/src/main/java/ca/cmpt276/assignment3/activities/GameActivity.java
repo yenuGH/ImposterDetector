@@ -308,8 +308,11 @@ public class GameActivity extends AppCompatActivity {
 
         winDialog.show();
 
+
         Button closeButton = winDialog.findViewById(R.id.btnExitGame);
         closeButton.setOnClickListener( view -> {
+            // Save the game in game manager
+            gameManager.addGame(currentGame);
             finish();
         });
     }

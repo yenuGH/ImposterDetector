@@ -9,6 +9,7 @@ import java.util.ArrayList;
 */
 public class GameManager {
     ArrayList<Game> games;
+    ArrayList<Game> bestGames;
     Game lastGameState; // Saved game state for if the application is closed mid-game
     int gamesPlayed;
 
@@ -31,6 +32,7 @@ public class GameManager {
         games.add(game);
     }
 
+    // Returns the amount of games played for a specific configuration
     public int getGamesPlayed(){ return gamesPlayed; }
 
     public void resetGamesPlayed() {
