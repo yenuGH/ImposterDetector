@@ -304,14 +304,14 @@ public class GameActivity extends AppCompatActivity {
         // Refresh the scanned results
         updateButtons();
 
+        updateGameInfo(foundMineCount, mineCount, scans, numberOfGamesPlayed);
+        saveGame();
+
         // Check to see if all mines have been found
         // If so, user wins game - show win dialog message
         if (foundMineCount == currentGame.getTotalMines()){
             createWinDialog();
         }
-
-        updateGameInfo(foundMineCount, mineCount, scans, numberOfGamesPlayed);
-        saveGame();
     }
 
     private void flashCell(int originRow, int originCol, int row, int col) {
@@ -379,12 +379,14 @@ public class GameActivity extends AppCompatActivity {
 
         winDialog.show();
 
+        // Save the game in game manager
+        gameManager.addGame(currentGame);
+
         clearGame();
 
         Button closeButton = winDialog.findViewById(R.id.btnExitGame);
         closeButton.setOnClickListener( view -> {
-            // Save the game in game manager
-            gameManager.addGame(currentGame);
+
             finish();
         });
     }

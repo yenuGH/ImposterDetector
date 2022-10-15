@@ -63,7 +63,7 @@ public class Game {
         // If so, increment the mineFoundCount
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
-                if (isMine(row,column)) {
+                if (isMine(row,column) && isVisible(row,column)) {
                     mineFoundCount++;
                 }
             }
