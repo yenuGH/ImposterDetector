@@ -9,9 +9,7 @@ import java.util.ArrayList;
 */
 public class GameManager {
     ArrayList<Game> games;
-    ArrayList<Game> bestGames;
     Game lastGameState; // Saved game state for if the application is closed mid-game
-    int gamesPlayed;
 
     // Singleton support for options
     private static GameManager instance;
@@ -33,10 +31,17 @@ public class GameManager {
     }
 
     // Returns the amount of games played for a specific configuration
-    public int getGamesPlayed(){ return gamesPlayed; }
+    public int getGamesPlayed(int rowNumber, int columnNumber, int mineNumber){
+        int gamesPlayed = 0;
+        for (Game game : games){
+            if (game.getRowValue() == rowNumber && game.getColumnValue() == columnNumber && game.getTotalMines() == mineNumber){
+                gamesPlayed++;
+            }
+        }
+        return gamesPlayed;
+    }
 
     public void resetGamesPlayed() {
-        gamesPlayed = 0;
         games.clear();
     }
 

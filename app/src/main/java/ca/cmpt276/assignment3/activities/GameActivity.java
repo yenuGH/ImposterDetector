@@ -54,10 +54,10 @@ public class GameActivity extends AppCompatActivity {
         currentGame = new Game();
         gameManager = GameManager.getInstance();
 
-        numberOfGamesPlayed = gameManager.getGamesPlayed();
         columnNumber = currentGame.getColumnValue();
         rowNumber = currentGame.getRowValue();
         mineCount = currentGame.getTotalMines();
+        numberOfGamesPlayed = gameManager.getGamesPlayed(rowNumber, columnNumber, mineCount);
         foundMineCount = 0;
 
         buttons = new Button[rowNumber][columnNumber];
