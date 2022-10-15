@@ -8,7 +8,8 @@ import java.util.ArrayList;
     Delete highscore for game configuration
 */
 public class GameManager {
-    ArrayList<Game> games;
+    private ArrayList<Game> games;
+    private int totalGames;
     Game lastGameState; // Saved game state for if the application is closed mid-game
 
     // Singleton support for options
@@ -17,6 +18,7 @@ public class GameManager {
     private GameManager() {
         // Private to prevent anything else instantiating this
         games = new ArrayList<>();
+        totalGames = 0;
     }
 
     public static GameManager getInstance() {
@@ -28,10 +30,11 @@ public class GameManager {
 
     public void addGame(Game game) {
         games.add(game);
+        totalGames++;
     }
 
     // Returns the amount of games played for a specific configuration
-    public int getGamesPlayed(int rowNumber, int columnNumber, int mineNumber){
+    public int getSpecificGamesPlayed(int rowNumber, int columnNumber, int mineNumber){
         int gamesPlayed = 0;
         for (Game game : games){
             if (game.getRowValue() == rowNumber && game.getColumnValue() == columnNumber && game.getTotalMines() == mineNumber){
@@ -39,6 +42,10 @@ public class GameManager {
             }
         }
         return gamesPlayed;
+    }
+
+    public int getTotalGamesPlayed(){
+        return totalGames;
     }
 
     public void resetGamesPlayed() {

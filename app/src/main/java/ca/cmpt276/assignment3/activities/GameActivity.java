@@ -18,12 +18,10 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import ca.cmpt276.assignment3.R;
 import ca.cmpt276.assignment3.model.Game;
 import ca.cmpt276.assignment3.model.GameManager;
-import ca.cmpt276.assignment3.model.GameOptions;
 
 /**
  * Activity where the game is played
@@ -57,7 +55,7 @@ public class GameActivity extends AppCompatActivity {
         columnNumber = currentGame.getColumnValue();
         rowNumber = currentGame.getRowValue();
         mineCount = currentGame.getTotalMines();
-        numberOfGamesPlayed = gameManager.getGamesPlayed(rowNumber, columnNumber, mineCount);
+        numberOfGamesPlayed = gameManager.getSpecificGamesPlayed(rowNumber, columnNumber, mineCount);
         foundMineCount = 0;
 
         buttons = new Button[rowNumber][columnNumber];
