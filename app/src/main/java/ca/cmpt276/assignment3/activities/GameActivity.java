@@ -2,10 +2,13 @@ package ca.cmpt276.assignment3.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
@@ -52,7 +55,7 @@ public class GameActivity extends AppCompatActivity {
         columnNumber = currentGame.getColumnValue();
         rowNumber = currentGame.getRowValue();
         mineCount = currentGame.getTotalMines();
-        foundMineCount = currentGame.getFoundMines();
+        foundMineCount = 0;
 
         buttons = new Button[rowNumber][columnNumber];
 
@@ -178,7 +181,7 @@ public class GameActivity extends AppCompatActivity {
         }
 
         // Debug toast
-        Toast.makeText(this, "Button clicked: " + col + "," + row, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, "Button clicked: " + col + "," + row, Toast.LENGTH_SHORT).show();
 
         // Get the button
         Button button = buttons[row][col];
@@ -212,6 +215,12 @@ public class GameActivity extends AppCompatActivity {
 
         // Refresh the scanned results
         updateScannedButtons();
+
+        // Check to see if all mines have been found
+        // If so, user wins game - show win dialog message
+        if (foundMineCount == currentGame.getTotalMines()){
+            createWinDialog();
+        }
 
         updateGameInfo(foundMineCount, mineCount, scans, numberOfGamesPlayed);
     }
@@ -259,5 +268,24 @@ public class GameActivity extends AppCompatActivity {
                 button.setMaxHeight(height);
             }
         }
+    }
+
+    private void createWinDialog(){
+
+        // https://stackoverflow.com/questions/28937106/how-to-make-custom-dialog-with-rounded-corners-in-android
+        // https://stackoverflow.com/questions/12102777/prevent-android-activity-dialog-from-closing-on-outside-touch
+        // https://stackoverflow.com/questions/13341560/how-to-create-a-custom-dialog-box-in-android
+        Dialog winDialog = new Dialog(GameActivity.this);
+        winDialog.setContentView(R.layout.dialog_game_win);
+        winDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        winDialog.setCancelable(false);
+        winDialog.setCanceledOnTouchOutside(false);
+
+        winDialog.show();
+
+        Button closeButton = winDialog.findViewById(R.id.btnExitGame);
+        closeButton.setOnClickListener( view -> {
+            finish();
+        });
     }
 }
