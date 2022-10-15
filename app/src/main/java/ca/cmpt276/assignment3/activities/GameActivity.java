@@ -1,8 +1,10 @@
 package ca.cmpt276.assignment3.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -18,6 +21,9 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import ca.cmpt276.assignment3.R;
 import ca.cmpt276.assignment3.model.Game;
@@ -50,13 +56,16 @@ public class GameActivity extends AppCompatActivity {
 
 
         currentGame = new Game();
+
+        loadGame();
+
         gameManager = GameManager.getInstance();
 
         columnNumber = currentGame.getColumnValue();
         rowNumber = currentGame.getRowValue();
         mineCount = currentGame.getTotalMines();
         numberOfGamesPlayed = gameManager.getSpecificGamesPlayed(rowNumber, columnNumber, mineCount);
-        foundMineCount = 0;
+        foundMineCount = currentGame.getFoundMines();
 
         buttons = new Button[rowNumber][columnNumber];
 
@@ -65,6 +74,34 @@ public class GameActivity extends AppCompatActivity {
 
         updateHighScoreText();
     }
+
+    private void saveGame() {
+        // Convert the game into json
+        Gson gson = new Gson();
+        String gameJSON = gson.toJson(currentGame);
+
+        // Save the game into preferences
+        SharedPreferences preferences = getSharedPreferences("Game Preferences",MODE_PRIVATE);
+        SharedPreferences.Editor editor  = preferences.edit();
+
+        editor.putString("GameJSON", gameJSON);
+        editor.apply();
+    }
+
+    private void loadGame() {
+        // Save the game into preferences
+        SharedPreferences preferences = getSharedPreferences("Game Preferences",MODE_PRIVATE);
+        String gameJSON = preferences.getString("GameJSON","");
+
+        if (gameJSON == "") {
+            return;
+        }
+
+        Gson gson = new Gson();
+        Game jsonGame = gson.fromJson(gameJSON, Game.class);
+        currentGame = jsonGame;
+    }
+
 
     /**
      * Update the game's text fields
@@ -182,10 +219,7 @@ public class GameActivity extends AppCompatActivity {
         if (currentGame.isScanned(row, col)) {
             return;
         }
-
-        // Debug toast
-        // Toast.makeText(this, "Button clicked: " + col + "," + row, Toast.LENGTH_SHORT).show();
-
+        
         // Get the button
         Button button = buttons[row][col];
 
@@ -238,6 +272,7 @@ public class GameActivity extends AppCompatActivity {
         }
 
         updateGameInfo(foundMineCount, mineCount, scans, numberOfGamesPlayed);
+        saveGame();
     }
 
     private void flashCell(int originRow, int originCol, int row, int col) {
@@ -327,4 +362,7 @@ public class GameActivity extends AppCompatActivity {
         TextView highScoreTextView = findViewById(R.id.tvHighScore);
         highScoreTextView.setText(highScoreString);
     }
+
+
+
 }
