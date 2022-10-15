@@ -30,6 +30,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
     <RadioGroup
         android:id="@+id/rgBoardSize"
         android:layout_width="wrap_content"
@@ -37,8 +39,6 @@
         android:layout_marginStart="32dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBoardSize">
-
-
 
 
     </RadioGroup>
@@ -64,7 +64,6 @@
         app:layout_constraintTop_toBottomOf="@+id/tvNumberOfMines">
 
 
-
     </RadioGroup>
 
     <Button
@@ -78,6 +77,19 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btnClearScores"
+        android:layout_width="140dp"
+        android:layout_height="65dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="216dp"
+        android:text="CLEAR SCORES"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btnSaveOptions"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

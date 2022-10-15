@@ -23,6 +23,7 @@ import android.widget.Toast;
 import ca.cmpt276.assignment3.R;
 import ca.cmpt276.assignment3.model.Game;
 import ca.cmpt276.assignment3.model.GameManager;
+import ca.cmpt276.assignment3.model.GameOptions;
 
 /**
  * Activity where the game is played
@@ -63,6 +64,8 @@ public class GameActivity extends AppCompatActivity {
 
         updateGameInfo(foundMineCount, mineCount, scans, numberOfGamesPlayed);
         populateGrid();
+
+        updateHighScoreText();
     }
 
     /**
@@ -309,5 +312,18 @@ public class GameActivity extends AppCompatActivity {
         closeButton.setOnClickListener( view -> {
             finish();
         });
+    }
+
+    private void updateHighScoreText() {
+        Game highScoreGame = GameManager.getInstance().findBestScoringGame(rowNumber,columnNumber,mineCount);
+        String highScoreString = "High Score: ";
+        if (highScoreGame == null) {
+            highScoreString += "None";
+        } else {
+            highScoreString += Integer.toString(highScoreGame.getScans());
+        }
+
+        TextView highScoreTextView = findViewById(R.id.tvHighScore);
+        highScoreTextView.setText(highScoreString);
     }
 }

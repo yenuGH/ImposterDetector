@@ -9,8 +9,11 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import ca.cmpt276.assignment3.R;
+import ca.cmpt276.assignment3.model.Game;
+import ca.cmpt276.assignment3.model.GameManager;
 import ca.cmpt276.assignment3.model.GameOptions;
 
 public class OptionsMenuActivity extends AppCompatActivity {
@@ -62,7 +65,6 @@ public class OptionsMenuActivity extends AppCompatActivity {
         loadGameOptions();
         setupSaveButton();
 
-
     }
 
     // https://www.youtube.com/watch?v=_yaP4etGKlU
@@ -83,6 +85,7 @@ public class OptionsMenuActivity extends AppCompatActivity {
             radioButton.setOnClickListener( view -> {
                 selectedBoardRowValue = rowValue;
                 selectedBoardColumnValue = columnValue;
+
             });
 
             rgBoardSize.addView(radioButton);
@@ -109,6 +112,7 @@ public class OptionsMenuActivity extends AppCompatActivity {
 
             radioButton.setOnClickListener(view -> {
                 selectedMineCountValue = mineCountValue;
+
             });
 
             rgMineCount.addView(radioButton);
@@ -130,10 +134,18 @@ public class OptionsMenuActivity extends AppCompatActivity {
         return Integer.parseInt(sbString);
     }
 
-    private void setupSaveButton(){
+    private void setupSaveButton() {
         Button btnSaveOptions = findViewById(R.id.btnSaveOptions);
         btnSaveOptions.setOnClickListener( view -> {
             saveGameOptions();
+        });
+    }
+
+
+    private void setupClearScoresButton() {
+        Button btnClearScores = findViewById(R.id.btnClearScores);
+        btnClearScores.setOnClickListener( view -> {
+            GameManager.getInstance().resetGamesPlayed();
         });
     }
 
@@ -150,7 +162,7 @@ public class OptionsMenuActivity extends AppCompatActivity {
 
     }
 
-    private void loadGameOptions(){
+    private void loadGameOptions() {
         selectedBoardSizeId = gameOptions.getSelectedBoardSizeOptionId();
         selectedMineCountId = gameOptions.getSelectedMineCountOptionId();
 
@@ -163,5 +175,7 @@ public class OptionsMenuActivity extends AppCompatActivity {
         rgBoardSize.check(selectedBoardSizeId);
         rgMineCount.check(selectedMineCountId);
     }
+
+
 
 }
