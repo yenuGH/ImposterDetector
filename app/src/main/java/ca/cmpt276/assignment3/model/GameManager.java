@@ -8,10 +8,9 @@ import java.util.ArrayList;
     Delete highscore for game configuration
 */
 public class GameManager {
-    ArrayList<Game> games;
-    ArrayList<Game> bestGames;
+    private ArrayList<Game> games;
+    private int totalGames;
     Game lastGameState; // Saved game state for if the application is closed mid-game
-    int gamesPlayed;
 
     // Singleton support for options
     private static GameManager instance;
@@ -19,6 +18,7 @@ public class GameManager {
     private GameManager() {
         // Private to prevent anything else instantiating this
         games = new ArrayList<>();
+        totalGames = 0;
     }
 
     public static GameManager getInstance() {
@@ -30,18 +30,26 @@ public class GameManager {
 
     public void addGame(Game game) {
         games.add(game);
+        totalGames++;
     }
 
     // Returns the amount of games played for a specific configuration
-    public int getGamesPlayed(){ return gamesPlayed; }
-
-    public void resetGamesPlayed() {
-        gamesPlayed = 0;
-        games.clear();
+    public int getSpecificGamesPlayed(int rowNumber, int columnNumber, int mineNumber){
+        int gamesPlayed = 0;
+        for (Game game : games){
+            if (game.getRowValue() == rowNumber && game.getColumnValue() == columnNumber && game.getTotalMines() == mineNumber){
+                gamesPlayed++;
+            }
+        }
+        return gamesPlayed;
     }
 
-    public void resetBestScoringGame(int rowNumber, int columnNumber, int mineNumber) {
-        games.remove(findBestScoringGame(rowNumber, columnNumber, mineNumber));
+    public int getTotalGamesPlayed(){
+        return totalGames;
+    }
+
+    public void resetGamesPlayed() {
+        games.clear();
     }
 
     /**
@@ -64,7 +72,8 @@ public class GameManager {
                     int newScore = game.getScans();
 
                     // Replace the old score if the new one is higher
-                    if (newScore > currentTopScore) {
+                    // Lower amount of scans = higher score
+                    if (newScore < currentTopScore) {
                         topScore = game;
                     }
                 }
