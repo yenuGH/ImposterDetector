@@ -40,10 +40,6 @@ public class GameManager {
         games.clear();
     }
 
-    public void resetBestScoringGame(int rowNumber, int columnNumber, int mineNumber) {
-        games.remove(findBestScoringGame(rowNumber, columnNumber, mineNumber));
-    }
-
     /**
      * Pass in parameters of game you want to look for, will iterate
      * through list of games and find one with the highest score
@@ -64,7 +60,8 @@ public class GameManager {
                     int newScore = game.getScans();
 
                     // Replace the old score if the new one is higher
-                    if (newScore > currentTopScore) {
+                    // Lower amount of scans = higher score
+                    if (newScore < currentTopScore) {
                         topScore = game;
                     }
                 }
