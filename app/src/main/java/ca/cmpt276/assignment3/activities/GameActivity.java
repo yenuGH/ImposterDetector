@@ -1,6 +1,5 @@
 package ca.cmpt276.assignment3.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
@@ -13,15 +12,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -65,14 +63,30 @@ public class GameActivity extends AppCompatActivity {
         rowNumber = currentGame.getRowValue();
         mineCount = currentGame.getTotalMines();
         numberOfGamesPlayed = gameManager.getSpecificGamesPlayed(rowNumber, columnNumber, mineCount);
-        foundMineCount = currentGame.getFoundMines();
+
 
         buttons = new Button[rowNumber][columnNumber];
 
-        updateGameInfo(foundMineCount, mineCount, scans, numberOfGamesPlayed);
+        updateGameInfo(currentGame.getFoundMines(), mineCount, scans, numberOfGamesPlayed);
         populateGrid();
-
         updateHighScoreText();
+
+        // Wait until the buttons have been initialized before trying to apply text/bitmaps to buttons
+        // https://stackoverflow.com/questions/3591784/views-getwidth-and-getheight-returns-0
+        Button lastButton = buttons[rowNumber-1][columnNumber-1];
+        lastButton.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                lastButton.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                updateButtons();
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        clearGame();
     }
 
     private void saveGame() {
@@ -81,8 +95,8 @@ public class GameActivity extends AppCompatActivity {
         String gameJSON = gson.toJson(currentGame);
 
         // Save the game into preferences
-        SharedPreferences preferences = getSharedPreferences("Game Preferences",MODE_PRIVATE);
-        SharedPreferences.Editor editor  = preferences.edit();
+        SharedPreferences preferences = getSharedPreferences("Game Preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
 
         editor.putString("GameJSON", gameJSON);
         editor.apply();
@@ -90,8 +104,8 @@ public class GameActivity extends AppCompatActivity {
 
     private void loadGame() {
         // Save the game into preferences
-        SharedPreferences preferences = getSharedPreferences("Game Preferences",MODE_PRIVATE);
-        String gameJSON = preferences.getString("GameJSON","");
+        SharedPreferences preferences = getSharedPreferences("Game Preferences", MODE_PRIVATE);
+        String gameJSON = preferences.getString("GameJSON", "");
 
         if (gameJSON == "") {
             return;
@@ -102,10 +116,23 @@ public class GameActivity extends AppCompatActivity {
         currentGame = jsonGame;
     }
 
+    private void clearGame() {
+        // Convert the game into json
+        Gson gson = new Gson();
+        String gameJSON = gson.toJson(currentGame);
+
+        // Save the game into preferences
+        SharedPreferences preferences = getSharedPreferences("Game Preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putString("GameJSON", "");
+        editor.apply();
+    }
+
 
     /**
      * Update the game's text fields
-     * 
+     *
      * @param foundMines  Number of mines the player has found
      * @param totalMines  Total number of mines on the game board
      * @param scansUsed   Number of scans the player has used
@@ -127,7 +154,7 @@ public class GameActivity extends AppCompatActivity {
 
     /**
      * Updates the contents of a textview
-     * 
+     *
      * @param textViewID Id of the textview
      * @param newString  String to set the contents of the textview to
      */
@@ -192,17 +219,47 @@ public class GameActivity extends AppCompatActivity {
     }
 
     /**
-     * Updates every scanned button to show the new number of undiscovered mines
+     * Updates every button to show the new number of undiscovered mines/impostors
      */
-    private void updateScannedButtons() {
+    private void updateButtons() {
+        // Lock Button Sizes
+        lockButtonSizes();
+
         // Iterate through every button, update their scanned text
         for (int row = 0; row < rowNumber; row++) {
             for (int col = 0; col < columnNumber; col++) {
+                // Get the button
+                Button button = buttons[row][col];
+
+                button.measure(0,0);
+
                 // If a button has been scanned, update the number of mines inside it
                 if (currentGame.isScanned(row, col)) {
-                    Button button = buttons[row][col];
+
                     int mineCount = currentGame.getAdjacentMines(row, col);
                     button.setText("" + mineCount);
+                }
+
+                // Update the mine's visuals if it's been revealed
+                if (currentGame.isMine(row,col) && currentGame.isVisible(row,col)) {
+                    // Check if the button's background has already been set
+                    if (button.getBackground().getClass() != BitmapDrawable.class) {
+
+
+                        // Get the size of the button
+                        int width = button.getWidth();
+                        int height = button.getHeight();
+
+                        // Scale the bitmap using a bitmap factory
+                        Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.action_tapped);
+                        Bitmap scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, width, height, true);
+
+                        // Import the resource
+                        Resources resource = getResources();
+                        button.setBackground(new
+
+                        BitmapDrawable(resource, scaledBitmap));
+                    }
                 }
             }
         }
@@ -219,12 +276,6 @@ public class GameActivity extends AppCompatActivity {
         if (currentGame.isScanned(row, col)) {
             return;
         }
-        
-        // Get the button
-        Button button = buttons[row][col];
-
-        // Lock Button Sizes
-        lockButtonSizes();
 
         interactWithCell(row, col);
         // If mine was found, update foundMineCount
@@ -232,18 +283,6 @@ public class GameActivity extends AppCompatActivity {
 
         // If the button is unscanned, reveal the mine
         if (currentGame.isMine(row, col) && !currentGame.isScanned(row, col)) {
-            // Get the size of the button
-            int width = button.getWidth();
-            int height = button.getHeight();
-
-            // Scale the bitmap using a bitmap factory
-            Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.action_tapped);
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(originalBitmap, width, height, true);
-
-            // Import the resource
-            Resources resource = getResources();
-            button.setBackground(new BitmapDrawable(resource, scaledBitmap));
-
             // Play impostor discovered sound
             playSound(R.raw.impostor_discovered);
         } else {
@@ -263,7 +302,7 @@ public class GameActivity extends AppCompatActivity {
         }
 
         // Refresh the scanned results
-        updateScannedButtons();
+        updateButtons();
 
         // Check to see if all mines have been found
         // If so, user wins game - show win dialog message
@@ -329,7 +368,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void createWinDialog(){
-
         // https://stackoverflow.com/questions/28937106/how-to-make-custom-dialog-with-rounded-corners-in-android
         // https://stackoverflow.com/questions/12102777/prevent-android-activity-dialog-from-closing-on-outside-touch
         // https://stackoverflow.com/questions/13341560/how-to-create-a-custom-dialog-box-in-android
@@ -341,6 +379,7 @@ public class GameActivity extends AppCompatActivity {
 
         winDialog.show();
 
+        clearGame();
 
         Button closeButton = winDialog.findViewById(R.id.btnExitGame);
         closeButton.setOnClickListener( view -> {

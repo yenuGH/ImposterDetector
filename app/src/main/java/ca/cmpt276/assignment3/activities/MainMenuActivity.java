@@ -3,9 +3,11 @@ package ca.cmpt276.assignment3.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ImageButton;
 
+import ca.cmpt276.assignment3.MainActivity;
 import ca.cmpt276.assignment3.R;
 
 public class MainMenuActivity extends AppCompatActivity {
@@ -16,6 +18,15 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
 
         setupMenuButtons();
+
+        SharedPreferences preferences = getSharedPreferences("Game Preferences", MODE_PRIVATE);
+        String gameJSON = preferences.getString("GameJSON", "");
+
+        if (gameJSON != "") {
+            // Go straight to the game screen
+            Intent gameIntent = new Intent(MainMenuActivity.this, GameActivity.class);
+            startActivity(gameIntent);
+        }
     }
 
     // When the back button is pressed while on the main menu screen

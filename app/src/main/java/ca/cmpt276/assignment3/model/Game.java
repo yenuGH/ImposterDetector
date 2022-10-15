@@ -63,8 +63,7 @@ public class Game {
         // If so, increment the mineFoundCount
         for (int row = 0; row < rows; row++) {
             for (int column = 0; column < columns; column++) {
-                CellType cell = cells[row][column];
-                if (cell == CellType.REVEALED_MINE) {
+                if (isMine(row,column)) {
                     mineFoundCount++;
                 }
             }
@@ -121,6 +120,10 @@ public class Game {
 
     public boolean isScanned(int row, int column) {
         return (cells[row][column] == CellType.SCANNED_MINE || cells[row][column] == CellType.SCANNED);
+    }
+
+    public boolean isVisible(int row, int column) {
+        return (cells[row][column] == CellType.SCANNED_MINE || cells[row][column] == CellType.REVEALED_MINE || cells[row][column] == CellType.SCANNED);
     }
 
     private void placeMines() {
