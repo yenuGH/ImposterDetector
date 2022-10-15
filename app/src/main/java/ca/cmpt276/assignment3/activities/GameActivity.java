@@ -9,6 +9,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -191,7 +193,7 @@ public class GameActivity extends AppCompatActivity {
         foundMineCount = currentGame.getFoundMines();
 
         // If the button is unscanned, reveal the mine
-        if (currentGame.isMine(row, col)) {
+        if (currentGame.isMine(row, col) && !currentGame.isScanned(row, col)) {
             // Get the size of the button
             int width = button.getWidth();
             int height = button.getHeight();
@@ -207,6 +209,13 @@ public class GameActivity extends AppCompatActivity {
             // Play impostor discovered sound
             playSound(R.raw.impostor_discovered);
         } else {
+
+            // Animation tutorial: https://www.youtube.com/watch?v=JvyA7seYiCI
+            // Flash cell
+            Animation animation = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fade_out);
+            button.setAnimation(animation);
+
+            // Play scan sound
             playSound(R.raw.scan_cell);
         }
 
