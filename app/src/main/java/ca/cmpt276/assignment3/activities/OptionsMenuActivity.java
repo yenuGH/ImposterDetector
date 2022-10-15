@@ -64,7 +64,7 @@ public class OptionsMenuActivity extends AppCompatActivity {
         createMineCountButtons();
         loadGameOptions();
         setupSaveButton();
-
+        setupClearScoresButton();
     }
 
     // https://www.youtube.com/watch?v=_yaP4etGKlU
@@ -85,7 +85,6 @@ public class OptionsMenuActivity extends AppCompatActivity {
             radioButton.setOnClickListener( view -> {
                 selectedBoardRowValue = rowValue;
                 selectedBoardColumnValue = columnValue;
-
             });
 
             rgBoardSize.addView(radioButton);
@@ -112,7 +111,6 @@ public class OptionsMenuActivity extends AppCompatActivity {
 
             radioButton.setOnClickListener(view -> {
                 selectedMineCountValue = mineCountValue;
-
             });
 
             rgMineCount.addView(radioButton);
@@ -168,6 +166,11 @@ public class OptionsMenuActivity extends AppCompatActivity {
 
         // If either of these IDs are -1, it means they have not been initialized yet.
         // Proceed with default values, can just exit
+
+        selectedBoardRowValue = gameOptions.getRowValue();
+        selectedBoardColumnValue = gameOptions.getColumnValue();
+        selectedMineCountValue = gameOptions.getMineCountValue();
+
         if (selectedBoardSizeId == -1 || selectedMineCountId == -1){
             return;
         }
