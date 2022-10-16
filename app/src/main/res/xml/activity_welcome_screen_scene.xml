@@ -53,6 +53,18 @@
                motion:motionTarget="@+id/ivWelcomeCharacter"
                motion:framePosition="60"
                android:scaleY="1" />
+           <KeyAttribute
+               motion:motionTarget="@+id/tvGameName"
+               motion:framePosition="25"
+               android:alpha="0" />
+           <KeyAttribute
+               motion:motionTarget="@+id/tvGameName"
+               motion:framePosition="60"
+               android:alpha="1" />
+           <KeyAttribute
+               motion:motionTarget="@+id/tvGameName"
+               motion:framePosition="0"
+               android:alpha="0" />
        </KeyFrameSet>
     </Transition>
 
