@@ -42,6 +42,7 @@ public class OptionsMenuActivity extends AppCompatActivity {
     private final String RB_BOARD_SIZE_ID_PREFIX = "board";
     private final String RB_MINE_COUNT_ID_PREFIX = "mine";
     public  final String GAME_OPTION_PREFERENCES = "Game Option Preferences";
+    public final String GAME_MANAGER_PREFERENCES = "Game Manager Preferences";
 
     private GameManager gameManager;
     private GameOptions gameOptions;
@@ -187,7 +188,8 @@ public class OptionsMenuActivity extends AppCompatActivity {
     private void setupClearScoresButton() {
         Button btnClearScores = findViewById(R.id.btnClearScores);
         btnClearScores.setOnClickListener( view -> {
-            GameManager.getInstance().resetGamesPlayed();
+            gameManager.resetGamesPlayed();
+            saveGamesList();
         });
     }
 
@@ -234,6 +236,20 @@ public class OptionsMenuActivity extends AppCompatActivity {
 
         // Save data into sharedpreferences
         editor.putString(GAME_OPTION_PREFERENCES, json);
+        editor.apply();
+    }
+
+    // If user decides to clear game scores, save empty games list to shared preferences
+    public void saveGamesList(){
+        SharedPreferences sharedPreferences = getSharedPreferences("Manager Preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+
+        // Convert the current instance of game manager to json string
+        String json = gson.toJson(gameManager.getGameList());
+
+        // Save data into shared preferences
+        editor.putString(GAME_MANAGER_PREFERENCES, json);
         editor.apply();
     }
 
