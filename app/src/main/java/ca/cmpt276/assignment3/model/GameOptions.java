@@ -1,5 +1,15 @@
 package ca.cmpt276.assignment3.model;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+
 // A class for storing the game options
 public class GameOptions {
 
@@ -17,7 +27,6 @@ public class GameOptions {
 
     // Singleton support for options
     private static GameOptions instance;
-
     private GameOptions() {
         // Private to prevent anything else instantiating this
 
@@ -29,7 +38,6 @@ public class GameOptions {
         columnValue = DEFAULT_COLUMN_SIZE;
         mineCountValue = DEFAULT_MINE_COUNT;
     }
-
     public static GameOptions getInstance() {
         if (instance == null) {
             instance = new GameOptions();
