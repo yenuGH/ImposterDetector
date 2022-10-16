@@ -44,6 +44,9 @@ public class GameOptions {
         }
         return instance;
     }
+    public void setInstance(GameOptions tempGameOptions) {
+        instance = tempGameOptions;
+    }
 
     public void setGameOptions(int boardSizeId, int mineCountId, int rowValue, int columnValue, int mineCountValue) {
         // These values are used when we set up the options screen again
@@ -75,4 +78,5 @@ public class GameOptions {
     public int getMineCountValue() {
         return mineCountValue;
     }
+
 }

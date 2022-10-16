@@ -31,6 +31,8 @@ import ca.cmpt276.assignment3.model.GameManager;
  * Activity where the game is played
  */
 public class GameActivity extends AppCompatActivity {
+    public final String GAME_MANAGER_PREFERENCES = "Game Manager Preferences";
+
     private int rowNumber;
     private int columnNumber;
     private int mineCount;
@@ -114,6 +116,22 @@ public class GameActivity extends AppCompatActivity {
         Gson gson = new Gson();
         Game jsonGame = gson.fromJson(gameJSON, Game.class);
         currentGame = jsonGame;
+    }
+
+    // Once the game is finished, save game into games list
+    // and instantly save games list into shared preferences
+    // Save games list from game manager
+    public void saveGamesList(){
+        SharedPreferences sharedPreferences = getSharedPreferences("Manager Preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+
+        // Convert the current instance of game manager to json string
+        String json = gson.toJson(gameManager.getGameList());
+
+        // Save data into shared preferences
+        editor.putString(GAME_MANAGER_PREFERENCES, json);
+        editor.apply();
     }
 
     private void clearGame() {
@@ -381,6 +399,7 @@ public class GameActivity extends AppCompatActivity {
 
         // Save the game in game manager
         gameManager.addGame(currentGame);
+        saveGamesList();
 
         clearGame();
 
