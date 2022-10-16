@@ -2,6 +2,8 @@ package ca.cmpt276.assignment3.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -53,6 +55,8 @@ public class OptionsMenuActivity extends AppCompatActivity {
     private int selectedMineCountId;
     private int selectedMineCountValue;
 
+    private boolean clickedSaveButton = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +74,16 @@ public class OptionsMenuActivity extends AppCompatActivity {
         loadOptions();
         setupSaveButton();
         setupClearScoresButton();
+    }
+
+    @Override
+    public void onBackPressed(){
+        if (clickedSaveButton == false){
+            createSaveWarningDialog();
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 
     // https://www.youtube.com/watch?v=_yaP4etGKlU
@@ -140,9 +154,34 @@ public class OptionsMenuActivity extends AppCompatActivity {
     private void setupSaveButton() {
         Button btnSaveOptions = findViewById(R.id.btnSaveOptions);
         btnSaveOptions.setOnClickListener( view -> {
+            clickedSaveButton = true;
             setOptions();
             saveOptionsData();
         });
+    }
+
+    private void createSaveWarningDialog() {
+        // When the user tries to exit the options screen without clicking the save button
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OptionsMenuActivity.this);
+        alertDialogBuilder.setTitle("You haven't clicked save!");
+        alertDialogBuilder.setMessage("Hey there!\n\nYou haven't clicked on the save button, so any changes made to " +
+                "your scores or game options will not be saved!\n\nAre you sure you want to exit without saving?");
+
+        // If the user wishes to exit without saving changes
+        alertDialogBuilder.setPositiveButton("Yes, cancel changes and exit.", (dialogInterface, i) -> {
+           finish();
+        });
+
+        // If the user would like to save changes, save data and exit activity
+        alertDialogBuilder.setNegativeButton("No, save changes and exit.", ((dialogInterface, i) -> {
+            setOptions();
+            saveOptionsData();
+            finish();
+        }));
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
     }
 
     private void setupClearScoresButton() {
