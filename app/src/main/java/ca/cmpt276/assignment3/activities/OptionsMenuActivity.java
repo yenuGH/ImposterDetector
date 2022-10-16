@@ -3,6 +3,7 @@ package ca.cmpt276.assignment3.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,6 +11,11 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 
 import ca.cmpt276.assignment3.R;
 import ca.cmpt276.assignment3.model.Game;
@@ -37,6 +43,7 @@ public class OptionsMenuActivity extends AppCompatActivity {
     );
     private final String RB_BOARD_SIZE_ID_PREFIX = "board";
     private final String RB_MINE_COUNT_ID_PREFIX = "mine";
+    public static final String GAME_OPTION_PREFERENCES = "Game Option Preferences";
 
     private GameOptions gameOptions;
     private RadioGroup rgBoardSize;
@@ -158,9 +165,15 @@ public class OptionsMenuActivity extends AppCompatActivity {
                                     selectedBoardColumnValue,
                                     selectedMineCountValue);
 
+        // Save the data into shared preferences
+        saveData();
     }
 
     private void loadGameOptions() {
+
+        // Load saved data (if there is any) from shared preferences
+        loadData();
+
         selectedBoardSizeId = gameOptions.getSelectedBoardSizeOptionId();
         selectedMineCountId = gameOptions.getSelectedMineCountOptionId();
 
@@ -179,6 +192,36 @@ public class OptionsMenuActivity extends AppCompatActivity {
         rgMineCount.check(selectedMineCountId);
     }
 
+    public void saveData(){
+        // Use the context of the GameOptionsActivity to access shared preferences
+        SharedPreferences sharedPreferences = getSharedPreferences("Game Options Preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
 
+        // Convert the current instance of game options to json string
+        String json = gson.toJson(gameOptions);
+
+        // Put json string into editor
+        editor.putString(GAME_OPTION_PREFERENCES, json);
+        editor.apply();
+    }
+
+    public void loadData(){
+        // Use the context of the GameOptionsActivity to access shared preferences
+        SharedPreferences sharedPreferences = getSharedPreferences("Game Options Preferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+
+        // Convert the current instance of game options to json string
+        String json = sharedPreferences.getString(GAME_OPTION_PREFERENCES, null);
+        Type type = new TypeToken<GameOptions>() {}.getType();
+
+        // If null, keep old instance
+        if (json == null){
+            return;
+        }
+
+        // Retrieve saved options data
+        gameOptions = gson.fromJson(json, type);
+    }
 
 }

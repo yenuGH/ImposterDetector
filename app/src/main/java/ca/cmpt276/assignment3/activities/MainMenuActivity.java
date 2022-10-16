@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ImageButton;
 
-import ca.cmpt276.assignment3.MainActivity;
 import ca.cmpt276.assignment3.R;
 
 public class MainMenuActivity extends AppCompatActivity {
