@@ -9,8 +9,6 @@ import java.util.ArrayList;
 */
 public class GameManager {
     private ArrayList<Game> games;
-    private int totalGames;
-    Game lastGameState; // Saved game state for if the application is closed mid-game
 
     // Singleton support for options
     private static GameManager instance;
@@ -18,7 +16,6 @@ public class GameManager {
     private GameManager() {
         // Private to prevent anything else instantiating this
         games = new ArrayList<>();
-        totalGames = 0;
     }
 
     public static GameManager getInstance() {
@@ -30,7 +27,6 @@ public class GameManager {
 
     public void addGame(Game game) {
         games.add(game);
-        totalGames++;
     }
 
     // Returns the amount of games played for a specific configuration
@@ -45,7 +41,14 @@ public class GameManager {
     }
 
     public int getTotalGamesPlayed(){
-        return totalGames;
+        return games.size();
+    }
+
+    public ArrayList<Game> getGameList(){
+        return games;
+    }
+    public void loadGameList(ArrayList<Game> games){
+        this.games = games;
     }
 
     public void resetGamesPlayed() {
@@ -82,4 +85,6 @@ public class GameManager {
 
         return topScore;
     }
+
+
 }

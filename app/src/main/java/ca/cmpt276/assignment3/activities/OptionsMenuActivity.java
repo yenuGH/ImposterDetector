@@ -1,8 +1,9 @@
 package ca.cmpt276.assignment3.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -10,7 +11,6 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -18,12 +18,10 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 
 import ca.cmpt276.assignment3.R;
-import ca.cmpt276.assignment3.model.Game;
 import ca.cmpt276.assignment3.model.GameManager;
 import ca.cmpt276.assignment3.model.GameOptions;
 
 public class OptionsMenuActivity extends AppCompatActivity {
-
     // Maybe create a dialog saying that if options were changed and save wasn't clicked and user tries exiting
     // 5.4 - Button for resetting game data for each configuration
 
@@ -43,8 +41,10 @@ public class OptionsMenuActivity extends AppCompatActivity {
     );
     private final String RB_BOARD_SIZE_ID_PREFIX = "board";
     private final String RB_MINE_COUNT_ID_PREFIX = "mine";
-    public static final String GAME_OPTION_PREFERENCES = "Game Option Preferences";
+    public  final String GAME_OPTION_PREFERENCES = "Game Option Preferences";
+    public final String GAME_MANAGER_PREFERENCES = "Game Manager Preferences";
 
+    private GameManager gameManager;
     private GameOptions gameOptions;
     private RadioGroup rgBoardSize;
     private RadioGroup rgMineCount;
@@ -56,6 +56,8 @@ public class OptionsMenuActivity extends AppCompatActivity {
     private int selectedMineCountId;
     private int selectedMineCountValue;
 
+    private boolean clickedSaveButton = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,14 +66,25 @@ public class OptionsMenuActivity extends AppCompatActivity {
         rgBoardSize = findViewById(R.id.rgBoardSize);
         rgMineCount = findViewById(R.id.rgMineCount);
         gameOptions = GameOptions.getInstance();
+        gameManager = GameManager.getInstance();
 
         // When the options screen is opened, setup the last checked options
         // Fill up the RadioGroups with dynamically created buttons
         createBoardSizeButtons();
         createMineCountButtons();
-        loadGameOptions();
+        loadOptions();
         setupSaveButton();
         setupClearScoresButton();
+    }
+
+    @Override
+    public void onBackPressed(){
+        if (clickedSaveButton == false){
+            createSaveWarningDialog();
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 
     // https://www.youtube.com/watch?v=_yaP4etGKlU
@@ -142,19 +155,45 @@ public class OptionsMenuActivity extends AppCompatActivity {
     private void setupSaveButton() {
         Button btnSaveOptions = findViewById(R.id.btnSaveOptions);
         btnSaveOptions.setOnClickListener( view -> {
-            saveGameOptions();
+            clickedSaveButton = true;
+            setOptions();
+            saveOptionsData();
         });
     }
 
+    private void createSaveWarningDialog() {
+        // When the user tries to exit the options screen without clicking the save button
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OptionsMenuActivity.this);
+        alertDialogBuilder.setTitle("You haven't clicked save!");
+        alertDialogBuilder.setMessage("Hey there!\n\nYou haven't clicked on the save button, so any changes made to " +
+                "your scores or game options will not be saved!\n\nAre you sure you want to exit without saving?");
+
+        // If the user wishes to exit without saving changes
+        alertDialogBuilder.setPositiveButton("Yes, cancel changes and exit.", (dialogInterface, i) -> {
+           finish();
+        });
+
+        // If the user would like to save changes, save data and exit activity
+        alertDialogBuilder.setNegativeButton("No, save changes and exit.", ((dialogInterface, i) -> {
+            setOptions();
+            saveOptionsData();
+            finish();
+        }));
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+    }
 
     private void setupClearScoresButton() {
         Button btnClearScores = findViewById(R.id.btnClearScores);
         btnClearScores.setOnClickListener( view -> {
-            GameManager.getInstance().resetGamesPlayed();
+            gameManager.resetGamesPlayed();
+            saveGamesList();
         });
     }
 
-    private void saveGameOptions(){
+    private void setOptions(){
 
         int boardSizeId = rgBoardSize.getCheckedRadioButtonId();
         int mineCountId = rgMineCount.getCheckedRadioButtonId();
@@ -165,15 +204,9 @@ public class OptionsMenuActivity extends AppCompatActivity {
                                     selectedBoardColumnValue,
                                     selectedMineCountValue);
 
-        // Save the data into shared preferences
-        saveData();
     }
 
-    private void loadGameOptions() {
-
-        // Load saved data (if there is any) from shared preferences
-        loadData();
-
+    private void loadOptions() {
         selectedBoardSizeId = gameOptions.getSelectedBoardSizeOptionId();
         selectedMineCountId = gameOptions.getSelectedMineCountOptionId();
 
@@ -192,36 +225,32 @@ public class OptionsMenuActivity extends AppCompatActivity {
         rgMineCount.check(selectedMineCountId);
     }
 
-    public void saveData(){
-        // Use the context of the GameOptionsActivity to access shared preferences
-        SharedPreferences sharedPreferences = getSharedPreferences("Game Options Preferences", MODE_PRIVATE);
+    // Save options data into shared preferences
+    private void saveOptionsData(){
+        SharedPreferences sharedPreferences = getSharedPreferences("Options Preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
 
         // Convert the current instance of game options to json string
         String json = gson.toJson(gameOptions);
 
-        // Put json string into editor
+        // Save data into sharedpreferences
         editor.putString(GAME_OPTION_PREFERENCES, json);
         editor.apply();
     }
 
-    public void loadData(){
-        // Use the context of the GameOptionsActivity to access shared preferences
-        SharedPreferences sharedPreferences = getSharedPreferences("Game Options Preferences", MODE_PRIVATE);
+    // If user decides to clear game scores, save empty games list to shared preferences
+    public void saveGamesList(){
+        SharedPreferences sharedPreferences = getSharedPreferences("Manager Preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
 
-        // Convert the current instance of game options to json string
-        String json = sharedPreferences.getString(GAME_OPTION_PREFERENCES, null);
-        Type type = new TypeToken<GameOptions>() {}.getType();
+        // Convert the current instance of game manager to json string
+        String json = gson.toJson(gameManager.getGameList());
 
-        // If null, keep old instance
-        if (json == null){
-            return;
-        }
-
-        // Retrieve saved options data
-        gameOptions = gson.fromJson(json, type);
+        // Save data into shared preferences
+        editor.putString(GAME_MANAGER_PREFERENCES, json);
+        editor.apply();
     }
 
 }
