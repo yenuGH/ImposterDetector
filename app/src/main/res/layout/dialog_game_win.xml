@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="350dp"
     android:layout_height="300dp"
     android:layout_gravity="center"
@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Congratulations, you have sucessfully\nreported the imposter!"
+                android:text="@string/congrats_text"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textStyle="bold|italic"
@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="REPORT MORE IMPOSTERS"
+                android:text="@string/return_to_menu_text"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="@+id/tvCongratulations"
                 app:layout_constraintStart_toStartOf="@+id/tvCongratulations"

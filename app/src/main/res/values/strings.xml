@@ -22,4 +22,21 @@
 
     </string>
     <string name="test">Foo!</string>
+    <string name="hi_score">High Score: </string>
+    <string name="none_score">None</string>
+    <string name="times_played">Times Played: %d</string>
+    <string name="cancel_and_exit">Yes, cancel changes and exit.</string>
+    <string name="save_and_exit">No, save changes and exit.</string>
+    <string name="save_not_clicked_popup">You haven\'t clicked save!</string>
+    <string name="exit_popup_body">Hey there!\n\nYou haven\'t clicked on the save button, so any changes made to your scores or game options will not be saved!\n\nAre you sure you want to exit without saving?</string>
+    <string name="game_name">IMPOSTER DETECTOR</string>
+    <string name="authors_text">Authored by: Yejun and Alex</string>
+    <string name="skip_text">SKIP</string>
+    <string name="help_header">Help</string>
+    <string name="board_size">Board Size</string>
+    <string name="mine_count">Mine Count</string>
+    <string name="save_button">SAVE</string>
+    <string name="clear_scores_button">CLEAR SCORES</string>
+    <string name="congrats_text">Congratulations, you have successfully\nreported the imposter!</string>
+    <string name="return_to_menu_text">REPORT MORE IMPOSTERS</string>
 </resources>

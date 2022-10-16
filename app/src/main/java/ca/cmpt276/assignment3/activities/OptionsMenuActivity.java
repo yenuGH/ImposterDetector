@@ -164,17 +164,16 @@ public class OptionsMenuActivity extends AppCompatActivity {
     private void createSaveWarningDialog() {
         // When the user tries to exit the options screen without clicking the save button
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OptionsMenuActivity.this);
-        alertDialogBuilder.setTitle("You haven't clicked save!");
-        alertDialogBuilder.setMessage("Hey there!\n\nYou haven't clicked on the save button, so any changes made to " +
-                "your scores or game options will not be saved!\n\nAre you sure you want to exit without saving?");
+        alertDialogBuilder.setTitle(R.string.save_not_clicked_popup);
+        alertDialogBuilder.setMessage(getString(R.string.exit_popup_body));
 
         // If the user wishes to exit without saving changes
-        alertDialogBuilder.setPositiveButton("Yes, cancel changes and exit.", (dialogInterface, i) -> {
+        alertDialogBuilder.setPositiveButton(R.string.cancel_and_exit, (dialogInterface, i) -> {
            finish();
         });
 
         // If the user would like to save changes, save data and exit activity
-        alertDialogBuilder.setNegativeButton("No, save changes and exit.", ((dialogInterface, i) -> {
+        alertDialogBuilder.setNegativeButton(R.string.save_and_exit, ((dialogInterface, i) -> {
             setOptions();
             saveOptionsData();
             finish();

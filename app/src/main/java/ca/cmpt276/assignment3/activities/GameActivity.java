@@ -166,7 +166,7 @@ public class GameActivity extends AppCompatActivity {
         updateTextView(R.id.tvScansUsed, scansUsedString);
 
         // Update the textview displaying the number of times a game has been played
-        String timesPlayedString = String.format("Times Played: %d", timesPlayed);
+        String timesPlayedString = String.format(getString(R.string.times_played), timesPlayed);
         updateTextView(R.id.tvTimesPlayed, timesPlayedString);
     }
 
@@ -412,9 +412,9 @@ public class GameActivity extends AppCompatActivity {
 
     private void updateHighScoreText() {
         Game highScoreGame = GameManager.getInstance().findBestScoringGame(rowNumber,columnNumber,mineCount);
-        String highScoreString = "High Score: ";
+        String highScoreString = getString(R.string.hi_score);
         if (highScoreGame == null) {
-            highScoreString += "None";
+            highScoreString += getString(R.string.none_score);
         } else {
             highScoreString += Integer.toString(highScoreGame.getScans());
         }
