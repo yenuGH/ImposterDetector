@@ -18,7 +18,19 @@
         Try to find all the impostors with as few scans as possible.\n\n
 
         <b>Resource Citations</b>\n
-        We can cite the images/sounds here with fancy <a href="http://https://crouton.net/">hyperlinks</a>
+        GameActivity Assets:\n
+                            <a href="https://www.spriters-resource.com/pc_computer/amongus/sheet/139385/">https://www.spriters-resource.com/pc_computer/amongus/sheet/139385/</a> \n
+                            <a href="https://www.sounds-resource.com/pc_computer/amongus/">https://www.sounds-resource.com/pc_computer/amongus/</a> \n
+                            <a href="https://wallpapers.com/wallpapers/among-us-crewmates-in-space-3td72p5sff91zbym.html">https://www.spriters-resource.com/pc_computer/amongus/sheet/139385/</a> \n\n
+        MainMenuActivity Assets:\n
+                            <a href="https://wall.alphacoders.com/big.php?i=1104367">https://wall.alphacoders.com/big.php?i=1104367</a> \n
+                            <a href="https://www.dafont.com/barely-handwritten.font">https://www.dafont.com/barely-handwritten.font</a> \n\n
+        OptionsMenuActivity Assets:\n
+                            <a href="https://wall.alphacoders.com/big.php?i=1146879">https://wall.alphacoders.com/big.php?i=1146879</a> \n\n
+        WelcomeScreenActivity Assets:\n
+                            <a href="https://www.youtube.com/watch?v=3MQGDPrOHFs">https://www.youtube.com/watch?v=3MQGDPrOHFs</a> \n
+                            <a href="https://www.pockettactics.com/among-us/logo">https://www.pockettactics.com/among-us/logo</a> \n\n
+
 
     </string>
     <string name="test">Foo!</string>
